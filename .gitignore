@@ -3,3 +3,12 @@
 ################################################################################
 
 /.vs
+/WangJun.NC.YunDocument/.vs/WangJun.NC.YunDocument
+/WangJun.NC.YunDocument/bin/Debug/netcoreapp3.0
+/WangJun.NC.YunDocument/obj
+/WangJun.NC.YunDocument.Config/obj
+/WangJun.NC.YunDocument.Config/bin/Debug/netcoreapp3.0
+/WangJun.NC.YunDocument.Models/bin/Debug/netcoreapp3.0
+/WangJun.NC.YunDocument.Runner/bin/Debug/netcoreapp3.0
+/WangJun.NC.YunDocument.Runner/obj
+*.gitattributes

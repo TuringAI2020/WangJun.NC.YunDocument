@@ -1,0 +1,11 @@
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\bin\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.deps.json
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\bin\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\bin\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\obj\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.csprojAssemblyReference.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\obj\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.AssemblyInfoInputs.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\obj\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.AssemblyInfo.cs
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\obj\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\obj\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\bin\Debug\netcoreapp3.0\WangJun.NC.YunUtils.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\bin\Debug\netcoreapp3.0\WangJun.NC.YunUtils.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.Models\obj\Debug\netcoreapp3.0\WangJun.NC.YunDocument.Models.csproj.CopyComplete
