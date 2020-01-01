@@ -26,19 +26,19 @@ namespace WangJun.NC.YunDocument
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public RES Save<T>(string data) where T: Item,new()
+        public RES Save(string data)
         {
             try
             {
-                var checkRes = this.CheckBeforeSave<T>(data);
+                var checkRes = this.CheckBeforeSave(data);
                 if (!checkRes.SUCCESS)
                 {
                     return checkRes;
                 }
 
-                var inst = checkRes.DATA as T;
+                var inst = checkRes.DATA as Document;
 
-               var res =  RedisDB.Current.Save<T>(inst);
+               var res =  RedisDB.Current.Save<Document>(inst);
 
 
                 return res;
@@ -54,11 +54,11 @@ namespace WangJun.NC.YunDocument
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected RES CheckBeforeSave<T>(string data) where T : Item, new()
+        protected RES CheckBeforeSave(string data)
         {
             try
             {
-                var inst = JSON.ToObject<T>(data);
+                var inst = JSON.ToObject<Document>(data);
                 return RES.OK(inst);
             }
             catch (Exception ex)
@@ -72,19 +72,19 @@ namespace WangJun.NC.YunDocument
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public RES Remove<T>(string data) where T : Item, new()
+        public RES Remove(string data)
         {
             try
             {
-                var checkRes = this.CheckBeforeRemove<T>(data);
+                var checkRes = this.CheckBeforeRemove(data);
                 if (!checkRes.SUCCESS)
                 {
                     return checkRes;
                 }
 
-                var inst = checkRes.DATA as T;
+                var inst = checkRes.DATA as Document;
 
-                var res = RedisDB.Current.Remove<T>(inst);
+                var res = RedisDB.Current.Remove<Document>(inst);
 
 
                 return res;
@@ -95,11 +95,11 @@ namespace WangJun.NC.YunDocument
             }
         }
 
-        protected RES CheckBeforeRemove<T>(string data) where T : Item, new()
+        protected RES CheckBeforeRemove(string data)
         {
             try
             {
-                var inst = JSON.ToObject<T>(data);
+                var inst = JSON.ToObject<Document>(data);
                 return RES.OK(inst);
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace WangJun.NC.YunDocument
             }
         }
 
-        public RES QueryList<T>(string filter) where T : Item, new()
+        public RES QueryList(string filter)
         {
             try
             {
@@ -120,12 +120,12 @@ namespace WangJun.NC.YunDocument
 
                 var queryFilter = checkRes.DATA as QueryFilter;
 
-                var res = RedisDB.Current.QueryList<T>(queryFilter.ToDictionary());
-                var list = res.DATA as List<T>;
-                //list.ForEach(p =>
-                //{
-                //    p.Detail = null;
-                //});
+                var res = RedisDB.Current.QueryList<Document>(queryFilter.ToDictionary());
+                var list = res.DATA as List<Document>;
+                list.ForEach(p =>
+                {
+                    p.Detail = null;
+                });
                 return RES.OK(list);
             }
             catch (Exception ex)
@@ -147,19 +147,19 @@ namespace WangJun.NC.YunDocument
             }
         }
 
-        public RES QueryItem<T>(string data) where T : Item, new()
+        public RES QueryItem(string data)
         {
             try
             {
-                var checkRes = this.CheckBeforeQueryItem<T>(data);
+                var checkRes = this.CheckBeforeQueryItem(data);
                 if (!checkRes.SUCCESS)
                 {
                     return checkRes;
                 }
 
-                var inst = checkRes.DATA as T;
+                var inst = checkRes.DATA as Document;
 
-                var res = RedisDB.Current.QueryItem<T>(inst);
+                var res = RedisDB.Current.QueryItem<Document>(inst);
 
 
                 return res;
@@ -170,11 +170,11 @@ namespace WangJun.NC.YunDocument
             }
         }
 
-        protected RES CheckBeforeQueryItem<T>(string data) where T : Item, new()
+        protected RES CheckBeforeQueryItem(string data)
         {
             try
             {
-                var inst = JSON.ToObject<T>(data);
+                var inst = JSON.ToObject<Document>(data);
                 return RES.OK(inst);
             }
             catch (Exception ex)

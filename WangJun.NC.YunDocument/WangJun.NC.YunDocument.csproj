@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="DB - 副本.cs" />
+    <Compile Remove="FrontDB2.cs" />
   </ItemGroup>
 
   <ItemGroup>
