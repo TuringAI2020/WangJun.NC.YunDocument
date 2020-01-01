@@ -21,24 +21,34 @@ namespace WangJun.NC.YunDocument.Runner
             var files = Directory.GetFiles(@"D:\test").ToList();
             var frontDB = FrontDB.Current;
 
-            //for (int k = 0; k < files.Count; k++)
-            //{
-            //    var p = files[k];
-            //    var file = new FileInfo(p);
-            //    var id = Guid.Parse($"00000000-0000-0000-0000-00000000000{k + 1}");
-            //    frontDB.Save(JSON.ToJson(new Document
-            //    {
-            //        ItemID= id
-            //        ,Id = id
-            //        ,Title = file.Name
-            //        , Detail = File.ReadAllText(p)
-            //        , CreateTime=DateTime.Now
-            //        , Status = (int)ENUM.实体状态.正常
-            //        , CreatorId = Guid.Empty
-            //        , Sort = DateTime.Now.Second
-            //        , GroupId= id
-            //    })); 
-            //}
+            for (int k = 0; k < files.Count; k++)
+            {
+                var p = files[k];
+                var file = new FileInfo(p);
+                var id = Guid.Parse($"00000000-0000-0000-0000-00000000000{k + 1}");
+                frontDB.Save(JSON.ToJson(new Document
+                {
+                    ItemID = id
+                    ,
+                    Id = id
+                    ,
+                    Title = file.Name
+                    ,
+                    Detail = File.ReadAllText(p)
+                    ,Summary= File.ReadAllText(p)
+                    ,
+                    CreateTime = DateTime.Now
+                    , UpdateTime=DateTime.Now
+                    ,
+                    Status = (int)ENUM.实体状态.正常
+                    ,
+                    CreatorId = Guid.Empty
+                    ,
+                    Sort = DateTime.Now.Second
+                    ,
+                    GroupId = id
+                }));
+            }
 
             //var query1 = frontDB.QueryList(JSON.ToJson(new QueryFilter { Status = "1" }));
             //var query2 = frontDB.QueryList(JSON.ToJson(new QueryFilter { Keywords = "苹果" }));
@@ -76,13 +86,18 @@ namespace WangJun.NC.YunDocument.Runner
             //    GroupId = id
             //}));
 
-            var id = Guid.Parse($"00000000-0000-0000-0000-000000000002");
-            frontDB.Remove(JSON.ToJson(new Document
-            {
-                ItemID = id
-                ,
-                Id = id 
-            }));
+            //var id = Guid.Parse($"00000000-0000-0000-0000-000000000002");
+            //frontDB.Remove(JSON.ToJson(new Document
+            //{
+            //    ItemID = id
+            //    ,
+            //    Id = id 
+            //}));
+            new SyncTaskRunner().SyncToBackDB<Front.Document, Models.Document>((oldVal,newVal)=> {
+                oldVal.Title = newVal.Title;
+                oldVal.Detail = newVal.Detail;
+                oldVal.UpdateTime = DateTime.Now;
+            });
             Console.WriteLine("OK");
 
 

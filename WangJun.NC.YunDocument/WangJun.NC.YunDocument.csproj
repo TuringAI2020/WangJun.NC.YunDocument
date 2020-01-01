@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\WangJun.NC.YunUtils\WangJun.NC.YunUtils\WangJun.NC.YunUtils.csproj" />
     <ProjectReference Include="..\WangJun.NC.YunDocument.Config\WangJun.NC.YunDocument.Config.csproj" />
     <ProjectReference Include="..\WangJun.NC.YunDocument.Models\WangJun.NC.YunDocument.Models.csproj" />

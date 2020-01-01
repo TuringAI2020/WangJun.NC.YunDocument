@@ -5,27 +5,34 @@ using WangJun.NC.YunDocument.Models;
 
 namespace WangJun.NC.YunDocument
 {
-    public partial class WangJunDocumentContext : DbContext
+    public partial class BackDB : WangJun.NC.YunUtils.DB
     {
-        public WangJunDocumentContext()
+        private static  BackDB backDB = null;
+        public static BackDB Current {
+            get
+            {
+                if (backDB == null)
+                {
+                    backDB = new BackDB();
+                }
+                return backDB;
+            }
+        }
+
+        public BackDB()
         {
         }
 
-        public WangJunDocumentContext(DbContextOptions<WangJunDocumentContext> options)
+        public BackDB(DbContextOptions<WangJun.NC.YunUtils.DB> options)
             : base(options)
         {
-        }
-
-        public virtual DbSet<Category> Category { get; set; }
-        public virtual DbSet<Document> Document { get; set; }
-        public virtual DbSet<LogOperation> LogOperation { get; set; }
+        } 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(Config.DBConnection);
+                 optionsBuilder.UseSqlServer(Config.DBConnection);
             }
         }
 

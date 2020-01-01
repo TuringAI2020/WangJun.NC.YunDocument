@@ -9,93 +9,26 @@ namespace WangJun.NC.YunDocument
     /// </summary>
     public class SyncTaskRunner
     {
-        #region 文档部分
-        protected RES SaveDocument(string data)
+
+        public void SyncToBackDB<T1,T2>(Action<T2, T2> callback) where T1: Item, new() where T2:class, new()
         {
-            try
+            var qName = $"MODIFY:{typeof(T1).FullName}".Replace(".",":");
+            var listName = $"LIST:{typeof(T1).FullName}".Replace(".", ":");
+            var resCount = REDIS.Current.GetQueueLength(qName);
+            var count = Convert.ToInt32(resCount.DATA);
+            while (resCount.SUCCESS && 0 < count)
             {
-                if (string.IsNullOrWhiteSpace(data) || !(data.StartsWith("{") && data.StartsWith("}")))
+                var popRes = REDIS.Current.Dequeue<Item>(qName);
+                if (popRes.SUCCESS && null!=popRes.DATA && popRes.DATA is Item)
                 {
-                    return RES.FAIL("传入参数非法");
+                    var qItem = JSON.Convert<Item, T1>(popRes.DATA as Item); 
+                    var val = RedisDB.Current.QueryItem<T1>(qItem);
+                    var newVal = JSON.ToObject<T2>(val.DATA.ToString());
+                    BackDB.Current.Save<T2>(newVal, callback, new object[] { qItem.ItemID});
                 }
-
-                var doc = JSON.ToObject<Document>(data);
-                if (null == doc)
-                {
-                    return RES.FAIL("无有效业务参数");
-                }
-
-                if (doc.Id == Guid.Empty)
-                {
-                    doc.Id = ID.GUID;
-                    doc.CreateTime = DateTime.Now;
-                    doc.UpdateTime = DateTime.Now;
-                    DB.Document.Add(doc);
-                }
-                else
-                {
-                    //DB.Document.
-                }
-
-                return RES.OK();
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex);
+                resCount = REDIS.Current.GetQueueLength(qName);
+                count = Convert.ToInt32(resCount.DATA);
             }
         }
-
-        protected RES RemoveDocument(string filter)
-        {
-            try
-            {
-
-                return RES.OK();
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex);
-            }
-        }
-
-        protected RES DeleteDocument(string filter)
-        {
-            try
-            {
-
-                return RES.OK();
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex);
-            }
-        }
-
-        protected RES SyncCheck()
-        {
-            try
-            {
-
-                return RES.OK();
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex);
-            }
-        }
-
-        protected RES InitialFront()
-        {
-            try
-            {
-
-                return RES.OK();
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex);
-            }
-        }
-        #endregion
     }
 }
