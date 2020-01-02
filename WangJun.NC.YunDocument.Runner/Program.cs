@@ -18,37 +18,37 @@ namespace WangJun.NC.YunDocument.Runner
             ///REDIS先写数据
             ///DB再同步
             ///
-            var files = Directory.GetFiles(@"D:\test").ToList();
-            var frontDB = FrontDB.Current;
+            //var files = Directory.GetFiles(@"D:\test").ToList();
+            //var frontDB = FrontDB.Current;
 
-            for (int k = 0; k < files.Count; k++)
-            {
-                var p = files[k];
-                var file = new FileInfo(p);
-                var id = Guid.Parse($"{k+1}0000000-0000-0000-0000-00000000000{k + 1}");
-                frontDB.Save<Document>(JSON.ToJson(new Document
-                {
-                    ItemID = id
-                    ,
-                    Id = id
-                    ,
-                    Title = file.Name
-                    ,
-                    Detail = File.ReadAllText(p)
-                    ,Summary= File.ReadAllText(p)
-                    ,
-                    CreateTime = DateTime.Now
-                    , UpdateTime=DateTime.Now
-                    ,
-                    Status = (int)ENUM.实体状态.正常
-                    ,
-                    CreatorId = Guid.Empty
-                    ,
-                    Sort = DateTime.Now.Second
-                    ,
-                    GroupId = id
-                }));
-            }
+            //for (int k = 0; k < files.Count; k++)
+            //{
+            //    var p = files[k];
+            //    var file = new FileInfo(p);
+            //    var id = Guid.Parse($"{k+1}0000000-0000-0000-0000-00000000000{k + 1}");
+            //    frontDB.Save<Document>(JSON.ToJson(new Document
+            //    {
+            //        ItemID = id
+            //        ,
+            //        Id = id
+            //        ,
+            //        Title = file.Name
+            //        ,
+            //        Detail = File.ReadAllText(p)
+            //        ,Summary= File.ReadAllText(p)
+            //        ,
+            //        CreateTime = DateTime.Now
+            //        , UpdateTime=DateTime.Now
+            //        ,
+            //        Status = (int)ENUM.实体状态.正常
+            //        ,
+            //        CreatorId = Guid.Empty
+            //        ,
+            //        Sort = DateTime.Now.Second
+            //        ,
+            //        GroupId = id
+            //    }));
+            //}
 
             //var query1 = frontDB.QueryList(JSON.ToJson(new QueryFilter { Status = "1" }));
             //var query2 = frontDB.QueryList(JSON.ToJson(new QueryFilter { Keywords = "苹果" }));
@@ -86,67 +86,67 @@ namespace WangJun.NC.YunDocument.Runner
             //    GroupId = id
             //}));
 
-            for (int k = 0; k < files.Count; k++)
-            {
-                var p = files[k];
-                var file = new FileInfo(p);
-                var id = Guid.Parse($"{k + 1}0000000-0000-0000-0000-00000000000{k + 1}");
-                frontDB.Save<Document>(JSON.ToJson(new Document
-                {
-                    ItemID = id
-                    ,
-                    Id = id
-                    ,
-                    Title = "更新" + file.Name
-                    ,
-                    Detail = "更新"+File.ReadAllText(p)
-                    ,
-                    Summary = "更新" + File.ReadAllText(p)
-                    ,
-                    CreateTime = DateTime.Now
-                    ,
-                    UpdateTime = DateTime.Now
-                    ,
-                    Status = (int)ENUM.实体状态.正常
-                    ,
-                    CreatorId = Guid.Empty
-                    ,
-                    Sort = DateTime.Now.Second
-                    ,
-                    GroupId = id
-                }));
-            }
+            //for (int k = 0; k < files.Count; k++)
+            //{
+            //    var p = files[k];
+            //    var file = new FileInfo(p);
+            //    var id = Guid.Parse($"{k + 1}0000000-0000-0000-0000-00000000000{k + 1}");
+            //    frontDB.Save<Document>(JSON.ToJson(new Document
+            //    {
+            //        ItemID = id
+            //        ,
+            //        Id = id
+            //        ,
+            //        Title = "更新" + file.Name
+            //        ,
+            //        Detail = "更新"+File.ReadAllText(p)
+            //        ,
+            //        Summary = "更新" + File.ReadAllText(p)
+            //        ,
+            //        CreateTime = DateTime.Now
+            //        ,
+            //        UpdateTime = DateTime.Now
+            //        ,
+            //        Status = (int)ENUM.实体状态.正常
+            //        ,
+            //        CreatorId = Guid.Empty
+            //        ,
+            //        Sort = DateTime.Now.Second
+            //        ,
+            //        GroupId = id
+            //    }));
+            //}
 
-            for (int k = 0; k < files.Count; k++)
-            {
-                var p = files[k];
-                var file = new FileInfo(p);
-                var id = Guid.Parse($"00000000-0000-0000-0000-00000000000{k + 1}");
-                frontDB.Remove<Document>(JSON.ToJson(new Document
-                {
-                    ItemID = id
-                    ,
-                    Id = id
-                    ,
-                    Title = "更新" + file.Name
-                    ,
-                    Detail = "更新" + File.ReadAllText(p)
-                    ,
-                    Summary = "更新" + File.ReadAllText(p)
-                    ,
-                    CreateTime = DateTime.Now
-                    ,
-                    UpdateTime = DateTime.Now
-                    ,
-                    Status = (int)ENUM.实体状态.正常
-                    ,
-                    CreatorId = Guid.Empty
-                    ,
-                    Sort = DateTime.Now.Second
-                    ,
-                    GroupId = id
-                }));
-            }
+            //for (int k = 0; k < files.Count; k++)
+            //{
+            //    var p = files[k];
+            //    var file = new FileInfo(p);
+            //    var id = Guid.Parse($"00000000-0000-0000-0000-00000000000{k + 1}");
+            //    frontDB.Remove<Document>(JSON.ToJson(new Document
+            //    {
+            //        ItemID = id
+            //        ,
+            //        Id = id
+            //        ,
+            //        Title = "更新" + file.Name
+            //        ,
+            //        Detail = "更新" + File.ReadAllText(p)
+            //        ,
+            //        Summary = "更新" + File.ReadAllText(p)
+            //        ,
+            //        CreateTime = DateTime.Now
+            //        ,
+            //        UpdateTime = DateTime.Now
+            //        ,
+            //        Status = (int)ENUM.实体状态.正常
+            //        ,
+            //        CreatorId = Guid.Empty
+            //        ,
+            //        Sort = DateTime.Now.Second
+            //        ,
+            //        GroupId = id
+            //    }));
+            //}
 
             //var id = Guid.Parse($"00000000-0000-0000-0000-000000000002");
             //frontDB.Remove(JSON.ToJson(new Document
@@ -155,12 +155,75 @@ namespace WangJun.NC.YunDocument.Runner
             //    ,
             //    Id = id 
             //}));
-            new SyncTaskRunner().SyncToBackDB<Front.Document, Models.Document>((oldVal,newVal)=> {
-                oldVal.Title = newVal.Title;
-                oldVal.Detail = newVal.Detail;
-                oldVal.Summary = newVal.Summary;
-                oldVal.UpdateTime = DateTime.Now;
-            });
+            //new SyncTaskRunner().SyncToBackDB<Front.Document, Models.Document>((oldVal,newVal)=> {
+            //    oldVal.Title = newVal.Title;
+            //    oldVal.Detail = newVal.Detail;
+            //    oldVal.Summary = newVal.Summary;
+            //    oldVal.UpdateTime = DateTime.Now;
+            //});
+
+            #region 目录
+            var rootId = Guid.Parse($"10000000-0000-0000-0000-000000000001");
+            CategoryFrontDB.Current.CreateRootNode<Category>(JSON.ToJson(new Category
+            {
+                AppId = rootId,
+                CreateTime = DateTime.Now,
+                Name = "根目录",
+                Id = rootId,
+                ItemID = rootId,
+                ParentId = Guid.Empty,
+                RootId = Guid.Empty,
+                Status = (int)ENUM.实体状态.正常
+            }));
+
+            var sub1Id = Guid.Parse($"20000000-0000-0000-0000-000000000001");
+            CategoryFrontDB.Current.CreateSubNode<Category>(JSON.ToJson(new Category
+            {
+                AppId = rootId,
+                CreateTime = DateTime.Now,
+                Name = "一级子目录",
+                Id = sub1Id,
+                ItemID = sub1Id,
+                ParentId = rootId,
+                RootId = rootId,
+                Status = (int)ENUM.实体状态.正常
+            }));
+
+            var sub2Id = Guid.Parse($"30000000-0000-0000-0000-000000000001");
+            CategoryFrontDB.Current.CreateSubNode<Category>(JSON.ToJson(new Category
+            {
+                AppId = rootId,
+                CreateTime = DateTime.Now,
+                Name = "二级子目录修改",
+                Id = sub2Id,
+                ItemID = sub2Id,
+                ParentId = sub1Id,
+                RootId = rootId,
+                Status = (int)ENUM.实体状态.正常
+            }));
+
+            CategoryFrontDB.Current.RemoveNode<Category>(JSON.ToJson(new Category
+            {
+                ItemID = sub2Id
+            }));
+            #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             Console.WriteLine("OK");
 
 

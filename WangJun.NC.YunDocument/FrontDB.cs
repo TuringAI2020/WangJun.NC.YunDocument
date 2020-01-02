@@ -108,7 +108,7 @@ namespace WangJun.NC.YunDocument
             }
         }
 
-        public RES QueryList<T>(string filter) where T : Item, new()
+        public RES QueryList<T>(string filter,Action<T> callback=null) where T : Item, new()
         {
             try
             {
@@ -122,10 +122,12 @@ namespace WangJun.NC.YunDocument
 
                 var res = RedisDB.Current.QueryList<T>(queryFilter.ToDictionary());
                 var list = res.DATA as List<T>;
-                //list.ForEach(p =>
-                //{
-                //    p.Detail = null;
-                //});
+                if (null != list &&null != callback)
+                {
+                    list.ForEach(p=> {
+                        callback(p);
+                    });
+                }
                 return RES.OK(list);
             }
             catch (Exception ex)
