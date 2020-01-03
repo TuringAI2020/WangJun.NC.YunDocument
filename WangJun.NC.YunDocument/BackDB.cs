@@ -44,7 +44,7 @@ namespace WangJun.NC.YunDocument
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.AppId).HasColumnName("AppID");
+                entity.Property(e => e.AppId).HasColumnName("AppID").IsRequired();
 
                 entity.Property(e => e.CreateTime).HasColumnType("datetime");
 

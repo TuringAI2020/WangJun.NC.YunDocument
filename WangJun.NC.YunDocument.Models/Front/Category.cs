@@ -21,6 +21,6 @@ namespace WangJun.NC.YunDocument.Front
         public long Size { get; set; }
         public string PathIdarray { get; set; }
         public string PathNameArray { get; set; }
-        public Guid? AppId { get; set; }
+        public Guid AppId { get; set; }
     }
 }

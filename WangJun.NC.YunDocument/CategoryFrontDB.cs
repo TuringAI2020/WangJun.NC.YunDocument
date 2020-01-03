@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WangJun.NC.YunUtils;
 using WangJun.NC.YunDocument.Front;
+using System.Linq;
 
 namespace WangJun.NC.YunDocument
 {
@@ -196,6 +197,8 @@ namespace WangJun.NC.YunDocument
 
                 var res = RedisDB.Current.QueryList<T>(queryFilter.ToDictionary());
                 var list = res.DATA as List<T>;
+                var parentId = Guid.Parse(queryFilter.ParentId);
+                list = list.Where(p => p.ParentId == parentId).ToList();
                 if (null != list && null != callback)
                 {
                     list.ForEach(p => {

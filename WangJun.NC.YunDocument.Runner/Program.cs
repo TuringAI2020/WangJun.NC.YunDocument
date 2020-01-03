@@ -164,65 +164,65 @@ namespace WangJun.NC.YunDocument.Runner
 
             #region 目录
             var rootId = Guid.Parse($"10000000-0000-0000-0000-000000000001");
-            CategoryFrontDB.Current.CreateRootNode<Category>(JSON.ToJson(new Category
-            {
-                AppId = rootId,
-                CreateTime = DateTime.Now,
-                Name = "根目录",
-                Id = rootId,
-                ItemID = rootId,
-                ParentId = Guid.Empty,
-                RootId = Guid.Empty,
-                Status = (int)ENUM.实体状态.正常
-            }));
+            //CategoryFrontDB.Current.CreateRootNode<Category>(JSON.ToJson(new Category
+            //{
+            //    AppId = rootId,
+            //    CreateTime = DateTime.Now,
+            //    Name = "根目录",
+            //    Id = rootId,
+            //    ItemID = rootId,
+            //    ParentId = Guid.Empty,
+            //    RootId = Guid.Empty,
+            //    Status = (int)ENUM.实体状态.正常
+            //}));
 
             var sub1Id = Guid.Parse($"20000000-0000-0000-0000-000000000001");
+            //CategoryFrontDB.Current.CreateSubNode<Category>(JSON.ToJson(new Category
+            //{
+            //    AppId = rootId,
+            //    CreateTime = DateTime.Now,
+            //    Name = "一级子目录",
+            //    Id = sub1Id,
+            //    ItemID = sub1Id,
+            //    ParentId = rootId,
+            //    RootId = rootId,
+            //    Status = (int)ENUM.实体状态.正常
+            //}));
+
+            var sub2Id = Guid.Parse($"30000000-0000-0000-0000-000000000001");
+            //CategoryFrontDB.Current.CreateSubNode<Category>(JSON.ToJson(new Category
+            //{
+            //    AppId = rootId,
+            //    CreateTime = DateTime.Now,
+            //    Name = "二级子目录",
+            //    Id = sub2Id,
+            //    ItemID = sub2Id,
+            //    ParentId = sub1Id,
+            //    RootId = rootId,
+            //    Status = (int)ENUM.实体状态.正常
+            //}));
+
+            //CategoryFrontDB.Current.RemoveNode<Category>(JSON.ToJson(new Category
+            //{
+            //    ItemID = sub2Id
+            //}));
+
+            var subNodes = CategoryFrontDB.Current.GetSubNodes<Category>(JSON.ToJson(new QueryFilter { AppId = "10000000-0000-0000-0000-000000000001", ParentId = "10000000-0000-0000-0000-000000000001" })) ;
+            var tree = CategoryFrontDB.Current.GetTree<Category>(JSON.ToJson(new QueryFilter { AppId = "10000000-0000-0000-0000-000000000001" }));
             CategoryFrontDB.Current.CreateSubNode<Category>(JSON.ToJson(new Category
             {
                 AppId = rootId,
                 CreateTime = DateTime.Now,
-                Name = "一级子目录",
-                Id = sub1Id,
-                ItemID = sub1Id,
+                Name = "一级子目录2",
+                Id = sub2Id,
+                ItemID = sub2Id,
                 ParentId = rootId,
                 RootId = rootId,
                 Status = (int)ENUM.实体状态.正常
             }));
-
-            var sub2Id = Guid.Parse($"30000000-0000-0000-0000-000000000001");
-            CategoryFrontDB.Current.CreateSubNode<Category>(JSON.ToJson(new Category
-            {
-                AppId = rootId,
-                CreateTime = DateTime.Now,
-                Name = "二级子目录修改",
-                Id = sub2Id,
-                ItemID = sub2Id,
-                ParentId = sub1Id,
-                RootId = rootId,
-                Status = (int)ENUM.实体状态.正常
-            }));
-
-            CategoryFrontDB.Current.RemoveNode<Category>(JSON.ToJson(new Category
-            {
-                ItemID = sub2Id
-            }));
             #endregion
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            var subNodes2 = CategoryFrontDB.Current.GetSubNodes<Category>(JSON.ToJson(new QueryFilter { AppId = "10000000-0000-0000-0000-000000000001", ParentId = "10000000-0000-0000-0000-000000000001" }));
 
             Console.WriteLine("OK");
 
