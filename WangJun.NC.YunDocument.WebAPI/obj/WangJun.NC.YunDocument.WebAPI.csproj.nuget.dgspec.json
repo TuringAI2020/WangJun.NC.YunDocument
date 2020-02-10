@@ -1,0 +1,441 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.WebAPI\\WangJun.NC.YunDocument.WebAPI.csproj": {}
+  },
+  "projects": {
+    "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj",
+        "projectName": "WangJun.NC.YunDocument.Config",
+        "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj",
+        "packagesPath": "C:\\Users\\WangJun\\.nuget\\packages\\",
+        "outputPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\WangJun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.cdn.azure.cn/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.0.1, 3.0.1]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj",
+        "projectName": "WangJun.NC.YunDocument.Models",
+        "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj",
+        "packagesPath": "C:\\Users\\WangJun\\.nuget\\packages\\",
+        "outputPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\WangJun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.cdn.azure.cn/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.0.1, 3.0.1]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.WebAPI\\WangJun.NC.YunDocument.WebAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.WebAPI\\WangJun.NC.YunDocument.WebAPI.csproj",
+        "projectName": "WangJun.NC.YunDocument.WebAPI",
+        "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.WebAPI\\WangJun.NC.YunDocument.WebAPI.csproj",
+        "packagesPath": "C:\\Users\\WangJun\\.nuget\\packages\\",
+        "outputPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.WebAPI\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\WangJun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.cdn.azure.cn/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj"
+              },
+              "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj"
+              },
+              "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.csproj"
+              },
+              "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.csproj",
+        "projectName": "WangJun.NC.YunDocument",
+        "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.csproj",
+        "packagesPath": "C:\\Users\\WangJun\\.nuget\\packages\\",
+        "outputPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\WangJun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.cdn.azure.cn/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Config\\WangJun.NC.YunDocument.Config.csproj"
+              },
+              "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunDocument\\WangJun.NC.YunDocument.Models\\WangJun.NC.YunDocument.Models.csproj"
+              },
+              "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj": {
+                "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.CodeAnalysis.FxCopAnalyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.9.8, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer.Design": {
+              "target": "Package",
+              "version": "[1.1.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.0.1, 3.0.1]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj",
+        "projectName": "WangJun.NC.YunUtils",
+        "projectPath": "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils.csproj",
+        "packagesPath": "C:\\Users\\WangJun\\.nuget\\packages\\",
+        "outputPath": "D:\\WangJunCode2019\\WangJun.NC.YunUtils\\WangJun.NC.YunUtils\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\WangJun\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.cdn.azure.cn/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer.Design": {
+              "target": "Package",
+              "version": "[1.1.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.0.601, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.0.1, 3.0.1]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.0.0, 3.0.0]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

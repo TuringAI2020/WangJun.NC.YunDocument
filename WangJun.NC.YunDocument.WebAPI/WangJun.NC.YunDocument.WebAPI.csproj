@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\WangJun.NC.YunUtils\WangJun.NC.YunUtils\WangJun.NC.YunUtils.csproj" />
+    <ProjectReference Include="..\WangJun.NC.YunDocument.Config\WangJun.NC.YunDocument.Config.csproj" />
+    <ProjectReference Include="..\WangJun.NC.YunDocument.Models\WangJun.NC.YunDocument.Models.csproj" />
+    <ProjectReference Include="..\WangJun.NC.YunDocument\WangJun.NC.YunDocument.csproj" />
+  </ItemGroup>
+
+
+</Project>

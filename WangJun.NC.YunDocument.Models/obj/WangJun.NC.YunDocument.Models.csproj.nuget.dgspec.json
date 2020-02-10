@@ -26,6 +26,7 @@
           "netcoreapp3.0"
         ],
         "sources": {
+          "https://api.nuget.org/v3/index.json": {},
           "https://nuget.cdn.azure.cn/v3/index.json": {}
         },
         "frameworks": {
@@ -100,6 +101,7 @@
           "netcoreapp3.0"
         ],
         "sources": {
+          "https://api.nuget.org/v3/index.json": {},
           "https://nuget.cdn.azure.cn/v3/index.json": {}
         },
         "frameworks": {
