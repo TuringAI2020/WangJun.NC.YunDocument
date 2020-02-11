@@ -42,6 +42,39 @@ namespace WangJun.NC.YunStockService
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Conception>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(20)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<Hxtc>(entity =>
+            {
+                entity.ToTable("HXTC");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Detail).IsRequired();
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(200);
+            });
+
             modelBuilder.Entity<StockCode>(entity =>
             {
                 entity.HasKey(e => e.Code);

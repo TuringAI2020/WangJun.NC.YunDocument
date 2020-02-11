@@ -27,8 +27,61 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
+        #region 同步概念名称
+        protected void SyncConception()
+        {
+            var setName = "Stock:BaseData:AllConception";
+            REDIS.Current.SetTraverse(setName, "*", (setName, item, count, index) =>
+            {
+                Console.WriteLine($"{item} {index} {count}"); 
+                BackDB.Current.Save<Conception>(new Conception { Name=item }, null, new object[] { item });
+                return true;
+            });
+        }
+        #endregion
+
+        #region 同步核心题材
+        protected void SyncHXTC()
+        {
+            var dictName_AllCode= "Stock:BaseData:AllCode";
+
+            REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
+            {
+                var dictName_Detail = $"Stock:Detail:{code}";
+                var res = REDIS.Current.DictTraverse(dictName_Detail,"*", (dictName2, key, value, count2, index2) => {
+                    var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
+                    BackDB.Current.Save<Hxtc>(new Hxtc { Id= id,Code=code , Title=key,Detail=value,CreateTime=DateTime.Now }, null, new object[] { id });
+                    Console.WriteLine($"{code} {key} {value} {index2} {count2}");
+                    return true;
+                }); 
+                return true;
+            });
+        }
+        #endregion
+
+        #region 同步股票和概念关系
+        protected void SyncRelationConception()
+        {
+            var dictName_AllCode = "Stock:BaseData:AllCode";
+
+            //REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
+            //{
+            //    var dictName_Detail = $"Stock:Detail:{code}";
+            //    var res = REDIS.Current.DictTraverse(dictName_Detail, "*", (dictName2, key, value, count2, index2) => {
+            //        var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
+            //        BackDB.Current.Save<Hxtc>(new Hxtc { Id = id, Code = code, Title = key, Detail = value, CreateTime = DateTime.Now }, null, new object[] { id });
+            //        Console.WriteLine($"{code} {key} {value} {index2} {count2}");
+            //        return true;
+            //    });
+            //    return true;
+            //});
+        }
+        #endregion
+
         public void Run() {
-            this.SyncStockCode();
+            //this.SyncStockCode();
+            //this.SyncConception();
+            this.SyncHXTC();
         }
     }
 }
