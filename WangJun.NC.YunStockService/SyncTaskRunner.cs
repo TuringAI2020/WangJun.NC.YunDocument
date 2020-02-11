@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WangJun.NC.YunStockService.Models;
 using WangJun.NC.YunUtils;
 
@@ -61,27 +62,55 @@ namespace WangJun.NC.YunStockService
 
         #region 同步股票和概念关系
         protected void SyncRelationConception()
+        { 
+            var res = REDIS.Current.QueryKeys("Stock:Relation:Conception:*");
+            if (res.SUCCESS)
+            {
+                var keys = res.DATA as List<string>;
+                keys.ForEach(p =>
+                {
+                    var res = REDIS.Current.SortedSetTraverse(p, "*", (setName, element, score, count, index) =>
+                    {
+                        var keyArr = setName.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        var conception = keyArr[keyArr.Length - 1];
+                        BackDB.Current.Save< RelationConception > (new RelationConception {  Code=element, Conception=conception, Score= Convert.ToDecimal(score) }, null, new object[] { element, conception });
+                        Console.WriteLine($"{setName} {element} {score} {index} {count}");
+                        return true;
+                    });
+
+                });
+            }
+        }
+        #endregion
+
+        #region 同步财务主要指标
+        protected void Sync财务主要指标()
         {
             var dictName_AllCode = "Stock:BaseData:AllCode";
 
-            //REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
-            //{
-            //    var dictName_Detail = $"Stock:Detail:{code}";
-            //    var res = REDIS.Current.DictTraverse(dictName_Detail, "*", (dictName2, key, value, count2, index2) => {
-            //        var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
-            //        BackDB.Current.Save<Hxtc>(new Hxtc { Id = id, Code = code, Title = key, Detail = value, CreateTime = DateTime.Now }, null, new object[] { id });
-            //        Console.WriteLine($"{code} {key} {value} {index2} {count2}");
-            //        return true;
-            //    });
-            //    return true;
-            //});
+            REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
+            {
+                var dictName_Detail = $"Stock:Detail:{code}";
+                var res = REDIS.Current.DictTraverse(dictName_Detail, "财务主要指标:*", (dictName2, key, jsonStr, count2, index2) =>
+                {
+                    jsonStr = jsonStr.Replace("(天)", string.Empty).Replace("(元)", string.Empty).Replace("(%)", string.Empty).Replace("/", string.Empty);
+                    var jsonData = JSON.ToObject<财务主要指标>(jsonStr);
+                    //var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
+                    BackDB.Current.Save<财务主要指标>(jsonData, null, new object[] { jsonData.Code,jsonData.DateTag });
+                    Console.WriteLine($"{code} {key} {jsonStr} {index2} {count2}");
+                    return true;
+                });
+                return true;
+            });
         }
         #endregion
 
         public void Run() {
             //this.SyncStockCode();
             //this.SyncConception();
-            this.SyncHXTC();
+            //this.SyncHXTC();
+            //this.SyncRelationConception();
+            this.Sync财务主要指标();
         }
     }
 }
