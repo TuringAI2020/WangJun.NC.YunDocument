@@ -19,6 +19,8 @@ namespace WangJun.NC.YunStockService.Models
         public virtual DbSet<Hxtc> Hxtc { get; set; }
         public virtual DbSet<RelationConception> RelationConception { get; set; }
         public virtual DbSet<StockCode> StockCode { get; set; }
+        public virtual DbSet<北向成交明细> 北向成交 { get; set; }
+        public virtual DbSet<北向持股明细> 北向持股明细 { get; set; }
         public virtual DbSet<财务主要指标> 财务主要指标 { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -96,6 +98,60 @@ namespace WangJun.NC.YunStockService.Models
                 entity.Property(e => e.Prefix)
                     .HasMaxLength(2)
                     .IsFixedLength();
+            });
+
+            modelBuilder.Entity<北向成交明细>(entity =>
+            {
+                entity.HasKey(e => new { e.Code, e.日期tag });
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.日期tag).HasColumnName("日期Tag");
+
+                entity.Property(e => e.收盘价).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.沪深股通买入金额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.沪深股通净买额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.沪深股通卖出金额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.沪深股通成交金额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.涨跌幅).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<北向持股明细>(entity =>
+            {
+                entity.HasKey(e => new { e.Code, e.持股日期tag });
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.持股日期tag).HasColumnName("持股日期Tag");
+
+                entity.Property(e => e.当日收盘价).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.当日涨跌幅).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值变化10日).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值变化1日).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值变化5日).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股数量).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股数量占a股百分比)
+                    .HasColumnName("持股数量占A股百分比")
+                    .HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.机构名称).HasColumnType("numeric(18, 2)");
             });
 
             modelBuilder.Entity<财务主要指标>(entity =>

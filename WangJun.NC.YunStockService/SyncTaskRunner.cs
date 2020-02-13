@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WangJun.NC.YunStockService.Models;
 using WangJun.NC.YunUtils;
 
@@ -22,7 +23,7 @@ namespace WangJun.NC.YunStockService
                 {
                     prefix = "SH";
                 }
-                BackDB.Current.Save<StockCode>(new StockCode { Code = key, Name = value,Prefix=prefix } , null,new object[] {key });
+                BackDB.Current.Save<StockCode>(new StockCode { Code = key, Name = value, Prefix = prefix }, null, new object[] { key });
                 return true;
             });
         }
@@ -34,8 +35,8 @@ namespace WangJun.NC.YunStockService
             var setName = "Stock:BaseData:AllConception";
             REDIS.Current.SetTraverse(setName, "*", (setName, item, count, index) =>
             {
-                Console.WriteLine($"{item} {index} {count}"); 
-                BackDB.Current.Save<Conception>(new Conception { Name=item }, null, new object[] { item });
+                Console.WriteLine($"{item} {index} {count}");
+                BackDB.Current.Save<Conception>(new Conception { Name = item }, null, new object[] { item });
                 return true;
             });
         }
@@ -44,17 +45,18 @@ namespace WangJun.NC.YunStockService
         #region 同步核心题材
         protected void SyncHXTC()
         {
-            var dictName_AllCode= "Stock:BaseData:AllCode";
+            var dictName_AllCode = "Stock:BaseData:AllCode";
 
             REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
             {
                 var dictName_Detail = $"Stock:Detail:{code}";
-                var res = REDIS.Current.DictTraverse(dictName_Detail,"*", (dictName2, key, value, count2, index2) => {
+                var res = REDIS.Current.DictTraverse(dictName_Detail, "*", (dictName2, key, value, count2, index2) =>
+                {
                     var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
-                    BackDB.Current.Save<Hxtc>(new Hxtc { Id= id,Code=code , Title=key,Detail=value,CreateTime=DateTime.Now }, null, new object[] { id });
+                    BackDB.Current.Save<Hxtc>(new Hxtc { Id = id, Code = code, Title = key, Detail = value, CreateTime = DateTime.Now }, null, new object[] { id });
                     Console.WriteLine($"{code} {key} {value} {index2} {count2}");
                     return true;
-                }); 
+                });
                 return true;
             });
         }
@@ -62,7 +64,7 @@ namespace WangJun.NC.YunStockService
 
         #region 同步股票和概念关系
         protected void SyncRelationConception()
-        { 
+        {
             var res = REDIS.Current.QueryKeys("Stock:Relation:Conception:*");
             if (res.SUCCESS)
             {
@@ -73,7 +75,7 @@ namespace WangJun.NC.YunStockService
                     {
                         var keyArr = setName.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                         var conception = keyArr[keyArr.Length - 1];
-                        BackDB.Current.Save< RelationConception > (new RelationConception {  Code=element, Conception=conception, Score= Convert.ToDecimal(score) }, null, new object[] { element, conception });
+                        BackDB.Current.Save<RelationConception>(new RelationConception { Code = element, Conception = conception, Score = Convert.ToDecimal(score) }, null, new object[] { element, conception });
                         Console.WriteLine($"{setName} {element} {score} {index} {count}");
                         return true;
                     });
@@ -96,7 +98,7 @@ namespace WangJun.NC.YunStockService
                     jsonStr = jsonStr.Replace("(天)", string.Empty).Replace("(元)", string.Empty).Replace("(%)", string.Empty).Replace("/", string.Empty);
                     var jsonData = JSON.ToObject<财务主要指标>(jsonStr);
                     //var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
-                    BackDB.Current.Save<财务主要指标>(jsonData, null, new object[] { jsonData.Code,jsonData.DateTag });
+                    BackDB.Current.Save<财务主要指标>(jsonData, null, new object[] { jsonData.Code, jsonData.DateTag });
                     Console.WriteLine($"{code} {key} {jsonStr} {index2} {count2}");
                     return true;
                 });
@@ -105,12 +107,38 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
-        public void Run() {
+        #region 同步北向成交明细
+        protected void Sync北向成交明细()
+        {
+            var dictName_AllCode = "Stock:BaseData:AllCode";
+
+            REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
+            {
+                Task.Run(() =>
+                {
+                    var dictName_Detail = $"Stock:BXCJMX:{code}";
+                    var res = REDIS.Current.SortedSetTraverse(dictName_Detail, "*", (dictName2, jsonStr, score, count2, index2) =>
+                    {
+                        var jsonData = JSON.ToObject<北向成交明细>(jsonStr);
+                        //var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
+                        BackDB.Current.Save<北向成交明细>(jsonData, null, new object[] { jsonData.Code, jsonData.日期tag });
+                        Console.WriteLine($"{code} {score} {jsonStr} {index2} {count2}");
+                        return true;
+                    });
+                    return true;
+                });
+            });
+        }
+        #endregion
+
+        public void Run()
+        {
             //this.SyncStockCode();
             //this.SyncConception();
             //this.SyncHXTC();
             //this.SyncRelationConception();
-            this.Sync财务主要指标();
+            //this.Sync财务主要指标();
+            this.Sync北向成交明细();
         }
     }
 }
