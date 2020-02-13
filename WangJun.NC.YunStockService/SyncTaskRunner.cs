@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using WangJun.NC.YunStockService.Models;
 using WangJun.NC.YunUtils;
@@ -108,6 +109,7 @@ namespace WangJun.NC.YunStockService
         #endregion
 
         #region 同步北向成交明细
+        protected Dictionary<int, Thread> threads北向成交明细 = new Dictionary<int, Thread>();
         protected void Sync北向成交明细()
         {
             var dictName_AllCode = "Stock:BaseData:AllCode";
@@ -116,17 +118,82 @@ namespace WangJun.NC.YunStockService
             {
                 Task.Run(() =>
                 {
+                    var db = BackDB.New;
+                    Console.WriteLine($"开始  {this.threads北向成交明细.Count} {code} ");
+                    lock (this.threads北向成交明细)
+                    {
+                        if (!this.threads北向成交明细.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                        {
+                            this.threads北向成交明细.Add(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread);
+                        }
+                    }
                     var dictName_Detail = $"Stock:BXCJMX:{code}";
                     var res = REDIS.Current.SortedSetTraverse(dictName_Detail, "*", (dictName2, jsonStr, score, count2, index2) =>
                     {
                         var jsonData = JSON.ToObject<北向成交明细>(jsonStr);
                         //var id = GUID.FromStringToGuid(MD5.ToMD5($"{code}{key}"));
-                        BackDB.Current.Save<北向成交明细>(jsonData, null, new object[] { jsonData.Code, jsonData.日期tag });
-                        Console.WriteLine($"{code} {score} {jsonStr} {index2} {count2}");
+                        db.Save<北向成交明细>(jsonData, null, new object[] { jsonData.Code, jsonData.日期tag });
+                        Console.WriteLine($"{this.threads北向成交明细.Count} {code} {score} {jsonStr} {index2} {count2}");
                         return true;
                     });
-                    return true;
+
+                    lock (this.threads北向成交明细)
+                    {
+                        if (this.threads北向成交明细.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                        {
+                            this.threads北向成交明细.Remove(Thread.CurrentThread.ManagedThreadId);
+                        }
+                    }
+                    Console.WriteLine($"结束  {this.threads北向成交明细.Count} {code} ");
                 });
+                Console.WriteLine($"等待秒数  {this.threads北向成交明细.Count} {code} ");
+                Thread.Sleep( 1000 * this.threads北向成交明细.Count);
+                return true;
+            });
+        }
+        #endregion
+
+        #region 同步北向持股明细
+        protected Dictionary<int, Thread> threads北向持股明细 = new Dictionary<int, Thread>();
+        protected void Sync北向持股明细()
+        {
+            var dictName_AllCode = "Stock:BaseData:AllCode";
+
+            REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
+            {
+                Task.Run(() =>
+                {
+                    var db = BackDB.New;
+                    Console.WriteLine($"开始  {this.threads北向持股明细.Count} {code} ");
+                    lock (this.threads北向持股明细)
+                    {
+                        if (!this.threads北向持股明细.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                        {
+                            this.threads北向持股明细.Add(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread);
+                        }
+                    }
+                    var dictName_Detail = $"Stock:北向持股:{code}";
+                    var res = REDIS.Current.SortedSetTraverse(dictName_Detail, "*", (dictName2, jsonStr, score, count2, index2) =>
+                    {
+                        var jsonData = JSON.ToObject<北向持股明细>(jsonStr);
+                        jsonData.Code = code;
+                        db.Save<北向持股明细>(jsonData, null, new object[] { jsonData.Code, jsonData.持股日期tag,jsonData.机构名称 });
+                        Console.WriteLine($"{this.threads北向持股明细.Count} {code} {score} {jsonStr} {index2} {count2}");
+                        return true;
+                    });
+
+                    lock (this.threads北向持股明细)
+                    {
+                        if (this.threads北向持股明细.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                        {
+                            this.threads北向持股明细.Remove(Thread.CurrentThread.ManagedThreadId);
+                        }
+                    }
+                    Console.WriteLine($"结束  {this.threads北向持股明细.Count} {code} ");
+                });
+                Console.WriteLine($"等待秒数  {this.threads北向持股明细.Count} {code} ");
+                Thread.Sleep(1000 * this.threads北向持股明细.Count);
+                return true;
             });
         }
         #endregion
@@ -138,7 +205,8 @@ namespace WangJun.NC.YunStockService
             //this.SyncHXTC();
             //this.SyncRelationConception();
             //this.Sync财务主要指标();
-            this.Sync北向成交明细();
+            //this.Sync北向成交明细();
+            this.Sync北向持股明细();
         }
     }
 }

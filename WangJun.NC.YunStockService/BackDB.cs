@@ -19,7 +19,15 @@ namespace WangJun.NC.YunStockService
                 return backDB;
             }
         }
-         
+
+        public static BackDB New
+        {
+            get
+            {
+                return new BackDB();
+            }
+        }
+
         public BackDB()
         {
         }
@@ -133,7 +141,7 @@ namespace WangJun.NC.YunStockService
 
             modelBuilder.Entity<北向持股明细>(entity =>
             {
-                entity.HasKey(e => new { e.Code, e.持股日期tag });
+                entity.HasKey(e => new { e.Code, e.持股日期tag,e.机构名称 });
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(6)
@@ -159,7 +167,9 @@ namespace WangJun.NC.YunStockService
                     .HasColumnName("持股数量占A股百分比")
                     .HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.机构名称).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.机构名称)
+                    .IsRequired()
+                    .HasMaxLength(200);
             });
 
             modelBuilder.Entity<财务主要指标>(entity =>
