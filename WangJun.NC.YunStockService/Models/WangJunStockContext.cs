@@ -19,9 +19,11 @@ namespace WangJun.NC.YunStockService.Models
         public virtual DbSet<Hxtc> Hxtc { get; set; }
         public virtual DbSet<RelationConception> RelationConception { get; set; }
         public virtual DbSet<StockCode> StockCode { get; set; }
-        public virtual DbSet<北向成交明细> 北向成交 { get; set; }
+        public virtual DbSet<北向成交明细> 北向成交明细 { get; set; }
         public virtual DbSet<北向持股明细> 北向持股明细 { get; set; }
+        public virtual DbSet<融资融券> 融资融券 { get; set; }
         public virtual DbSet<财务主要指标> 财务主要指标 { get; set; }
+        public virtual DbSet<资金流向> 资金流向 { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -102,7 +104,8 @@ namespace WangJun.NC.YunStockService.Models
 
             modelBuilder.Entity<北向成交明细>(entity =>
             {
-                entity.HasKey(e => new { e.Code, e.日期tag });
+                entity.HasKey(e => new { e.Code, e.日期tag })
+                    .HasName("PK_北向成交");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(6)
@@ -125,13 +128,15 @@ namespace WangJun.NC.YunStockService.Models
 
             modelBuilder.Entity<北向持股明细>(entity =>
             {
-                entity.HasKey(e => new { e.Code, e.持股日期tag });
+                entity.HasKey(e => new { e.Code, e.持股日期tag, e.机构名称 });
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(6)
                     .IsFixedLength();
 
                 entity.Property(e => e.持股日期tag).HasColumnName("持股日期Tag");
+
+                entity.Property(e => e.机构名称).HasMaxLength(200);
 
                 entity.Property(e => e.当日收盘价).HasColumnType("numeric(18, 2)");
 
@@ -150,8 +155,50 @@ namespace WangJun.NC.YunStockService.Models
                 entity.Property(e => e.持股数量占a股百分比)
                     .HasColumnName("持股数量占A股百分比")
                     .HasColumnType("numeric(18, 2)");
+            });
 
-                entity.Property(e => e.机构名称).HasColumnType("numeric(18, 2)");
+            modelBuilder.Entity<融资融券>(entity =>
+            {
+                entity.HasKey(e => new { e.Code, e.交易日期tag });
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.交易日期tag).HasColumnName("交易日期Tag");
+
+                entity.Property(e => e.交易日期)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.收盘价).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.涨跌幅).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融券余量).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融券余额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融券偿还量).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融券净卖出).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融券卖出量).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资买入额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资余额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资余额占流通市值比).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资偿还额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资净买入).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资融券余额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.融资融券余额差值).HasColumnType("numeric(18, 2)");
             });
 
             modelBuilder.Entity<财务主要指标>(entity =>
@@ -255,6 +302,46 @@ namespace WangJun.NC.YunStockService.Models
                 entity.Property(e => e.销售现金流营业收入).HasColumnType("numeric(18, 2)");
 
                 entity.Property(e => e.预收款营业收入).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<资金流向>(entity =>
+            {
+                entity.HasKey(e => new { e.Code, e.日期tag });
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.日期tag).HasColumnName("日期Tag");
+
+                entity.Property(e => e.中单净流入净占比).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.中单净流入净额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.主力净流入净占比).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.主力净流入净额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.大单净流入净占比).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.大单净流入净额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.小单净流入净占比).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.小单净流入净额).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.收盘价).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.日期)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.涨跌幅).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.超大单净流入净占比).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.超大单净流入净额).HasColumnType("numeric(18, 2)");
             });
 
             OnModelCreatingPartial(modelBuilder);
