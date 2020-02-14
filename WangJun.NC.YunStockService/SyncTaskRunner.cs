@@ -251,6 +251,60 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
+        #region 同步资金流向
+        protected Dictionary<int, Thread> threads资金流向 = new Dictionary<int, Thread>();
+        protected void Sync资金流向()
+        {
+            var dictName_AllCode = "Stock:BaseData:AllCode";
+
+            REDIS.Current.DictTraverse(dictName_AllCode, "*", (dictName1, code, name, count1, index1) =>
+            {
+                Task.Run(() =>
+                {
+                    var db = BackDB.New;
+                    Console.WriteLine($"开始  {this.threads资金流向.Count} {code} ");
+                    lock (this.threads资金流向)
+                    {
+                        if (!this.threads资金流向.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                        {
+                            this.threads资金流向.Add(Thread.CurrentThread.ManagedThreadId, Thread.CurrentThread);
+                        }
+                    }
+                    var dictName_Detail = $"Stock:ZJLX:{code}";
+                    var res = REDIS.Current.SortedSetTraverse(dictName_Detail, "*", (dictName2, jsonStr, score, count2, index2) =>
+                    {
+                        try
+                        {
+                            var jsonData = JSON.ToObject<资金流向>(jsonStr);
+                            db.Save<资金流向>(jsonData, null, new object[] { jsonData.Code, jsonData.日期tag });
+                            Console.WriteLine($"资金流向 {this.threads资金流向.Count} {code} {score} {jsonStr} {index2} {count2}");
+                            return true;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"资金流向 {e.Message}");
+                            Console.Beep(14000, 3000);
+                            return true;
+                        }
+                    });
+
+                    lock (this.threads资金流向)
+                    {
+                        if (this.threads资金流向.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                        {
+                            this.threads资金流向.Remove(Thread.CurrentThread.ManagedThreadId);
+                        }
+                    }
+                    Console.WriteLine($"结束  {this.threads资金流向.Count} {code} ");
+                });
+                Console.WriteLine($"等待秒数  {this.threads资金流向.Count} {code} ");
+                Thread.Sleep(1000 * this.threads资金流向.Count);
+                return true;
+            });
+        }
+
+        #endregion
+
         public void Run()
         {
             //this.SyncStockCode();
@@ -260,7 +314,8 @@ namespace WangJun.NC.YunStockService
             //this.Sync财务主要指标();
             //this.Sync北向成交明细();
             //this.Sync北向持股明细();
-            this.Sync融资融券();
+            //this.Sync融资融券();
+            this.Sync资金流向();
         }
     }
 }
