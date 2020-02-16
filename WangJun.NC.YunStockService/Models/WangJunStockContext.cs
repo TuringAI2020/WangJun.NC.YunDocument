@@ -21,9 +21,11 @@ namespace WangJun.NC.YunStockService.Models
         public virtual DbSet<StockCode> StockCode { get; set; }
         public virtual DbSet<北向成交明细> 北向成交明细 { get; set; }
         public virtual DbSet<北向持股明细> 北向持股明细 { get; set; }
+        public virtual DbSet<沪深股通机构> 沪深股通机构 { get; set; }
         public virtual DbSet<融资融券> 融资融券 { get; set; }
         public virtual DbSet<财务主要指标> 财务主要指标 { get; set; }
         public virtual DbSet<资金流向> 资金流向 { get; set; }
+        public virtual DbSet<重要代码> 重要代码 { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -155,6 +157,15 @@ namespace WangJun.NC.YunStockService.Models
                 entity.Property(e => e.持股数量占a股百分比)
                     .HasColumnName("持股数量占A股百分比")
                     .HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<沪深股通机构>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.机构名称)
+                    .IsRequired()
+                    .HasMaxLength(200);
             });
 
             modelBuilder.Entity<融资融券>(entity =>
@@ -342,6 +353,15 @@ namespace WangJun.NC.YunStockService.Models
                 entity.Property(e => e.超大单净流入净占比).HasColumnType("numeric(18, 2)");
 
                 entity.Property(e => e.超大单净流入净额).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<重要代码>(entity =>
+            {
+                entity.HasKey(e => e.Code);
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
             });
 
             OnModelCreatingPartial(modelBuilder);

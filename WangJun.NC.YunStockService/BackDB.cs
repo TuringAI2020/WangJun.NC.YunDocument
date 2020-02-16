@@ -171,6 +171,15 @@ namespace WangJun.NC.YunStockService
                     .HasColumnType("numeric(18, 2)");
             });
 
+            modelBuilder.Entity<沪深股通机构>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.机构名称)
+                    .IsRequired()
+                    .HasMaxLength(200);
+            });
+
             modelBuilder.Entity<融资融券>(entity =>
             {
                 entity.HasKey(e => new { e.Code, e.交易日期tag });
@@ -356,6 +365,15 @@ namespace WangJun.NC.YunStockService
                 entity.Property(e => e.超大单净流入净占比).HasColumnType("numeric(18, 2)");
 
                 entity.Property(e => e.超大单净流入净额).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<重要代码>(entity =>
+            {
+                entity.HasKey(e => e.Code);
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
             });
 
             OnModelCreatingPartial(modelBuilder);

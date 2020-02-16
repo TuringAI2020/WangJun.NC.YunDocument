@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WangJun.NC.YunStockService.Models;
@@ -305,6 +306,18 @@ namespace WangJun.NC.YunStockService
 
         #endregion
 
+        #region 反向同步重要代码到REDIS
+        protected void 反向同步重要代码()
+        {
+            var db = BackDB.New;
+            var list = db.QueryList<重要代码>(null).ToList();
+            list.ForEach(p=> {
+                REDIS.Current.SortedSetAdd("Stock:Task:VIPCode", p.Code, 0);
+                Console.WriteLine(p.Code);
+            });
+        }
+        #endregion
+
         public void Run()
         {
             //this.SyncStockCode();
@@ -315,7 +328,8 @@ namespace WangJun.NC.YunStockService
             //this.Sync北向成交明细();
             //this.Sync北向持股明细();
             //this.Sync融资融券();
-            this.Sync资金流向();
+            //this.Sync资金流向();
+            this.反向同步重要代码();
         }
     }
 }
