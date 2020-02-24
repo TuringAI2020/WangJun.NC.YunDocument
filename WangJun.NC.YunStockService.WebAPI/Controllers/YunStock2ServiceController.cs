@@ -11,11 +11,7 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
     [ApiController]
     [Route("[controller]")]
     public class YunStock2ServiceController : ControllerBase
-    {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+    { 
 
         private readonly ILogger<YunStock2ServiceController> _logger;
 
@@ -25,20 +21,29 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
         }
 
         [HttpGet]
-        public RES Get(string taskId)
+        public RES Get(string keyName, string taskId)
         {
-            var res =  DataProcNode.GetInst().GetTask(taskId);
+            var res =  DataProcNode.GetInst().GetTask(keyName,taskId);
             return res;
         }
 
         [HttpPost]
         public RES Post()
         {
+            var keyName = this.Request.Form["keyName"];
             var method = this.Request.Form["method"];
             var taskId = this.Request.Form["taskId"];
             var jsonReq = this.Request.Form["jsonReq"];
             var jsonRes = this.Request.Form["jsonRes"];
-            var res = DataProcNode.GetInst().SaveBXCGMX(taskId,jsonReq, jsonRes);
+            var res = RES.FAIL("keyName参数未匹配");
+            if ("BXCJMX" == keyName)
+            {
+                res = DataProcNode.GetInst().SaveBXCJMX(keyName, taskId, jsonReq, jsonRes);
+            }
+            else if ("RZRQ" == keyName || "ZJLX" == keyName || "CWFX" == keyName)
+            {
+                res = DataProcNode.GetInst().SaveProcData(keyName, taskId, jsonReq, jsonRes);
+            }
             return res;
         }
     }
