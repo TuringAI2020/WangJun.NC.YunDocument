@@ -523,7 +523,7 @@ namespace WangJun.NC.YunStockService
             });
         }
         #endregion
-
+         
         protected Dictionary<string, string> threads增量同步 = new Dictionary<string, string>();
         protected void AutoSync()
         {
