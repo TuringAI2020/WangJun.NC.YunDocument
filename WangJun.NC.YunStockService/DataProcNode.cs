@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using WangJun.NC.YunStockService.Models;
 using WangJun.NC.YunUtils;
@@ -284,5 +285,107 @@ namespace WangJun.NC.YunStockService
             Console.WriteLine($"任务分配情况 {listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
             return RES.OK(task.Key);
         }
-    }
+
+        #region 北向代码更新
+        public RES Update北向代码(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:BXCode";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+
+            try
+            {
+                var list = JSON.ToObject<List<北向代码>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                        var res2 = REDIS.Current.DictAdd(setName, p.Code, p.Name);
+                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+                         
+                    });
+                }
+                Console.WriteLine($"{MethodBase.GetCurrentMethod().Name} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"BXCODE {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 所有机构更新
+        public RES Update所有机构(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:JG";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+
+            try
+            {
+                var list = JSON.ToObject<List<所有机构>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                        var res2 = REDIS.Current.SortedSetAdd(setName, p.Href, p.Sort);
+                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+
+                    });
+                }
+                Console.WriteLine($"{MethodBase.GetCurrentMethod().Name} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"JG {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 创建任务 - 北向持股统计
+        public RES CreateTask北向持股统计(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:JG";
+            var qTaskName = "Stock:Task:BXCGTJ:Task0";
+
+            try
+            {
+                var count = 0;
+                var total = 0;
+                REDIS.Current.KeyRemove(qTaskName);
+                var res = REDIS.Current.SortedSetTraverse(setName, "*", (dictName2, href, score, count2, index2) => {
+                    var item =new {
+                                             Score = score,
+                                             Url= href,
+                                             RetryCount=  3
+                                            };
+                    var res2 = REDIS.Current.Enqueue(qTaskName, item);
+                    total++;
+                    if (res2.SUCCESS) {
+                        count++;
+                    }
+                    return true;
+                });
+                res.MESSAGE = $"北向持股统计任务创建完毕 应该创建 {total} 实际 {count}";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"CreateTask北向持股统计 {ex.Message}");
+            }
+        }
+            #endregion
+        }
 }

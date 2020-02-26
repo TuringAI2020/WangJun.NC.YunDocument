@@ -44,6 +44,15 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             {
                 res = DataProcNode.GetInst().SaveProcData(keyName, taskId, jsonReq, jsonRes);
             }
+            else if ("BXCODE" == keyName)
+            {
+                res = DataProcNode.GetInst().Update北向代码(jsonReq, jsonRes);
+            }
+            else if ("JG" == keyName)
+            {
+                res = DataProcNode.GetInst().Update所有机构(jsonReq, jsonRes);
+            }
+ 
             return res;
         }
     }

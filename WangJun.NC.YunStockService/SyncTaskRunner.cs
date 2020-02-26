@@ -523,7 +523,75 @@ namespace WangJun.NC.YunStockService
             });
         }
         #endregion
-         
+
+        #region 同步北向代码
+        protected void 同步北向代码()
+        {
+            var setName = $"Stock:BXCode";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+            var db = BackDB.New;
+            var qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
+            do
+            {
+                if (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>)
+                {
+                    try
+                    {
+                        object qData = qRes.DATA; 
+
+                        var jsonStr = JSON.ToJson(qData);
+                        var jsonData = JSON.ToObject<北向代码>(jsonStr);
+                        var dbRes = db.Save<北向代码>(jsonData, null, new object[] { jsonData.Code});
+                        Console.WriteLine($"同步北向代码 {dbRes} {jsonStr}");
+
+                    }
+                    catch (Exception e)
+                    {
+                        REDIS.Current.Enqueue(qSyncName, qRes.DATA);
+                        Console.WriteLine($"同步北向代码异常 {e.Message} {qSyncName} {JSON.ToJson(qRes)}");
+                        Thread.Sleep(10 * 1000);
+                    }
+                }
+                qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
+            }
+            while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
+        }
+        #endregion
+
+        #region 同步所有机构
+        protected void 同步所有机构()
+        {
+            var setName = $"Stock:JG";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+            var db = BackDB.New;
+            var qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
+            do
+            {
+                if (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>)
+                {
+                    try
+                    {
+                        object qData = qRes.DATA;
+
+                        var jsonStr = JSON.ToJson(qData);
+                        var jsonData = JSON.ToObject<所有机构>(jsonStr);
+                        var dbRes = db.Save<所有机构>(jsonData, null, new object[] { jsonData.JgCode,jsonData.JgName });
+                        Console.WriteLine($"同步所有机构 {dbRes} {jsonStr}");
+
+                    }
+                    catch (Exception e)
+                    {
+                        REDIS.Current.Enqueue(qSyncName, qRes.DATA);
+                        Console.WriteLine($"同步所有机构异常 {e.Message} {qSyncName} {JSON.ToJson(qRes)}");
+                        Thread.Sleep(10 * 1000);
+                    }
+                }
+                qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
+            }
+            while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
+        }
+        #endregion
+
         protected Dictionary<string, string> threads增量同步 = new Dictionary<string, string>();
         protected void AutoSync()
         {
@@ -868,9 +936,49 @@ namespace WangJun.NC.YunStockService
                 }
                 #endregion
 
+                #region 北向代码同步
+                try
+                {
+                    var setName = $"Stock:BXCode";
+                    var qSyncName = $"Stock:Sync:2DB:{setName}";
+                    var keyName = $"Stock:Sync:2DB:Check:{setName}";
+                    var res = REDIS.Current.CacheGet<string>(keyName);
+                    if (!res.SUCCESS)
+                    {
+                        this.同步北向代码();
+                        REDIS.Current.CacheSet(keyName, DateTime.Now.ToString(), new TimeSpan(3, 0, 0));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"执行北向代码同步任务出现异常 {ex.Message}");
+                }
+                #endregion
+
+                #region 所有机构同步
+                try
+                {
+                    var setName = $"Stock:JG";
+                    var qSyncName = $"Stock:Sync:2DB:{setName}";
+                    var keyName = $"Stock:Sync:2DB:Check:{setName}";
+                    var res = REDIS.Current.CacheGet<string>(keyName);
+                    if (!res.SUCCESS)
+                    {
+                        this.同步所有机构();
+                        REDIS.Current.CacheSet(keyName, DateTime.Now.ToString(), new TimeSpan(24, 0, 0));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"执行所有机构同步任务出现异常 {ex.Message}");
+                }
+                #endregion
+
                 Console.WriteLine($"同步任务检查 {DateTime.Now}");
                 Thread.Sleep(5000);
             }
+
+
         }
 
         public void Run()

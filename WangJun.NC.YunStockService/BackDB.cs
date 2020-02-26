@@ -116,6 +116,20 @@ namespace WangJun.NC.YunStockService
                     .IsFixedLength();
             });
 
+            modelBuilder.Entity<北向代码>(entity =>
+            {
+                entity.HasKey(e => e.Code);
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(8)
+                    .IsFixedLength();
+            });
+
             modelBuilder.Entity<北向成交明细>(entity =>
             {
                 entity.HasKey(e => new { e.Code, e.日期tag })
@@ -169,6 +183,25 @@ namespace WangJun.NC.YunStockService
                 entity.Property(e => e.持股数量占a股百分比)
                     .HasColumnName("持股数量占A股百分比")
                     .HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<所有机构>(entity =>
+            {
+                entity.HasKey(e => new { e.JgCode, e.JgName });
+
+                entity.Property(e => e.JgCode)
+                    .HasColumnName("jgCode")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.JgName)
+                    .HasColumnName("jgName")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Href)
+                    .IsRequired()
+                    .HasMaxLength(1024);
+
+                entity.Property(e => e.Tag).HasMaxLength(500);
             });
 
             modelBuilder.Entity<沪深股通机构>(entity =>
@@ -378,7 +411,6 @@ namespace WangJun.NC.YunStockService
 
             OnModelCreatingPartial(modelBuilder);
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
