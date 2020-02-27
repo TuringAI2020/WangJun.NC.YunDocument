@@ -16,5 +16,6 @@ namespace WangJun.NC.YunStockService.Models
         public decimal 持股市值变化1日 { get; set; }
         public decimal 持股市值变化5日 { get; set; }
         public decimal 持股市值变化10日 { get; set; }
+        public string JpCode { get; set; }
     }
 }

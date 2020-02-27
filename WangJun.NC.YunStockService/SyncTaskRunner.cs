@@ -416,9 +416,7 @@ namespace WangJun.NC.YunStockService
             while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
         }
         #endregion
-
-
-
+         
         #region 同步资金流向
         protected Dictionary<int, Thread> threads资金流向 = new Dictionary<int, Thread>();
         protected void Sync资金流向()
@@ -587,6 +585,68 @@ namespace WangJun.NC.YunStockService
                     }
                 }
                 qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
+            }
+            while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
+        }
+        #endregion
+
+        #region 增量同步北向持股统计
+        protected void IncSyncBXCGTJ(string qName)
+        {
+            var db = BackDB.New;
+            var qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qName);
+            do
+            {
+                if (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>)
+                {
+                    try
+                    {
+                        object qData = qRes.DATA; 
+                        var jsonStr = JSON.ToJson(qData);
+                        var jsonData = JSON.ToObject<北向持股统计>(jsonStr);
+                        var dbRes = db.Save<北向持股统计>(jsonData, null, new object[] { jsonData.持股日期tag, jsonData.机构名称 });
+                        Console.WriteLine($"增量同步北向持股统计 {dbRes} {jsonStr}");
+
+                    }
+                    catch (Exception e)
+                    {
+                        REDIS.Current.Enqueue(qName, qRes.DATA);
+                        Console.WriteLine($"增量同步北向持股统计 异常 {e.Message} {qName} {JSON.ToJson(qRes)}");
+                        Thread.Sleep(10 * 1000);
+                    }
+                }
+                qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qName);
+            }
+            while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
+        }
+        #endregion
+
+        #region 增量同步北向机构持股明细 - 机构维度
+        protected void IncSyncBXCGMXURL(string qName)
+        {
+            var db = BackDB.New;
+            var qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qName);
+            do
+            {
+                if (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>)
+                {
+                    try
+                    {
+                        object qData = qRes.DATA;
+                        var jsonStr = JSON.ToJson(qData);
+                        var jsonData = JSON.ToObject<北向机构持股明细>(jsonStr);
+                        var dbRes = db.Save<北向机构持股明细>(jsonData, null, new object[] { jsonData.Code,jsonData.持股日期tag, jsonData.JgCode });
+                        Console.WriteLine($"增量同步北向机构持股明细 {dbRes} {jsonStr}");
+
+                    }
+                    catch (Exception e)
+                    {
+                        REDIS.Current.Enqueue(qName, qRes.DATA);
+                        Console.WriteLine($"增量同步北向机构持股明细 异常 {e.Message} {qName} {JSON.ToJson(qRes)}");
+                        Thread.Sleep(10 * 1000);
+                    }
+                }
+                qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qName);
             }
             while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
         }
@@ -971,6 +1031,134 @@ namespace WangJun.NC.YunStockService
                 catch (Exception ex)
                 {
                     Console.WriteLine($"执行所有机构同步任务出现异常 {ex.Message}");
+                }
+                #endregion
+
+                #region 增量同步北向持股统计
+                try
+                {
+                    var taskName = "增量同步北向持股统计";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:BXCGTJ");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSyncBXCGTJ(p);
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 暂时没有要同步的数据");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
+                }
+                #endregion
+
+                #region 增量同步北向机构持股明细
+                try
+                {
+                    var taskName = "增量同步北向机构持股明细";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:BXCGMXURL");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSyncBXCGMXURL(p);
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 暂时没有要同步的数据");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
                 }
                 #endregion
 

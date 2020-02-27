@@ -40,7 +40,8 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             {
                 res = DataProcNode.GetInst().SaveBXCJMX(keyName, taskId, jsonReq, jsonRes);
             }
-            else if ("RZRQ" == keyName || "ZJLX" == keyName || "CWFX" == keyName)
+            else if ("RZRQ" == keyName || "ZJLX" == keyName || "CWFX" == keyName || "BXCGTJ" == keyName
+                || "BXCGMXURL" == keyName)
             {
                 res = DataProcNode.GetInst().SaveProcData(keyName, taskId, jsonReq, jsonRes);
             }
@@ -52,7 +53,11 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             {
                 res = DataProcNode.GetInst().Update所有机构(jsonReq, jsonRes);
             }
- 
+            else if ("BXCGMXURL" == keyName)
+            {
+                res = DataProcNode.GetInst().Update所有北向持股明细链接(jsonReq, jsonRes);
+            }
+
             return res;
         }
     }

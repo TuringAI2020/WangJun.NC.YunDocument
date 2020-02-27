@@ -208,6 +208,60 @@ namespace WangJun.NC.YunStockService
                         return res;
                     }
                 }
+                else if ("BXCGTJ" == keyName)
+                {
+                    var count = 0; 
+                    var list = JSON.ToObject<List<北向持股统计>>(jsonRes);
+                    if (null != list && 0 < list.Count)
+                    { 
+                        list.ForEach(p =>
+                        {
+                            var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
+                            var setName = $"Stock:{keyName}:{p.机构名称}";
+                            var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                            var res2 = REDIS.Current.SortedSetAdd(setName, p, p.持股日期tag);
+                            var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                            if (res.SUCCESS)
+                            {
+                                count += 1;
+                            }
+                        });
+                    }
+                    if ((0 < list.Count && count == list.Count) || 0 == list.Count)
+                    {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
+                        taskDict[listName].Remove(jsonReq);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
+                        return res;
+                    }
+                }
+                else if ("BXCGMXURL" == keyName)
+                {
+                    var count = 0;
+                    var list = JSON.ToObject<List<北向机构持股明细>>(jsonRes);
+                    if (null != list && 0 < list.Count)
+                    {
+                        list.ForEach(p =>
+                        {
+                            var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
+                            var setName = $"Stock:{keyName}:{p.机构名称}";
+                            var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                            var res2 = REDIS.Current.SortedSetAdd(setName, p, p.持股日期tag);
+                            var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                            if (res.SUCCESS)
+                            {
+                                count += 1;
+                            }
+                        });
+                    }
+                    if ((0 < list.Count && count == list.Count) || 0 == list.Count)
+                    {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
+                        taskDict[listName].Remove(jsonReq);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        return res;
+                    }
+                }
                 return RES.FAIL($"传入参数无效");
             }
             catch (Exception ex)
@@ -350,6 +404,36 @@ namespace WangJun.NC.YunStockService
             catch (Exception ex)
             {
                 return RES.FAIL($"JG {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 所有北向持股明细链接
+        public RES Update所有北向持股明细链接(string jsonReq, string jsonRes)
+        { 
+            try
+            {
+                var list = JSON.ToObject<List<Dictionary<string,string>>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        var dateTag = p["DateTag"];
+                        var listName = $"Stock:Task:BXCGMXURL:{dateTag}";
+                        var res = REDIS.Current.Enqueue(listName,p);
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+                    });
+                }
+                Console.WriteLine($"{MethodBase.GetCurrentMethod().Name} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"Update所有北向持股明细链接 {ex.Message}");
             }
         }
         #endregion
