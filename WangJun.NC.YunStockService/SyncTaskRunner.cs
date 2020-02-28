@@ -652,6 +652,37 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
+        #region 增量同步东方财富网快讯
+        protected void IncSync<T>(string qName,Func<T,object[]> callbackGetKey) where T:class,new()
+        {
+            var db = BackDB.New;
+            var qRes = REDIS.Current.Dequeue<T>(qName);
+            do
+            {
+                if (qRes.SUCCESS && qRes.DATA is T)
+                {
+                    try
+                    {
+                        object qData = qRes.DATA;
+                        var jsonStr = JSON.ToJson(qData);
+                        var jsonData = JSON.ToObject<T>(jsonStr);
+                        var keys = callbackGetKey(jsonData);
+                        var dbRes = db.Save<T>(jsonData, null, keys);
+                        Console.WriteLine($"增量同步 {typeof(T)} {dbRes} {jsonStr}");
+                    }
+                    catch (Exception e)
+                    {
+                        REDIS.Current.Enqueue(qName, qRes.DATA);
+                        Console.WriteLine($"增量同步  {typeof(T)} 异常 {e.Message} {qName} {JSON.ToJson(qRes)}");
+                        Thread.Sleep(10 * 1000);
+                    }
+                }
+                qRes = REDIS.Current.Dequeue<T>(qName);
+            }
+            while (qRes.SUCCESS && qRes.DATA is T);
+        }
+        #endregion
+
         protected Dictionary<string, string> threads增量同步 = new Dictionary<string, string>();
         protected void AutoSync()
         {
@@ -1130,6 +1161,70 @@ namespace WangJun.NC.YunStockService
                                         keys.ForEach(p =>
                                         {
                                             this.IncSyncBXCGMXURL(p);
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 暂时没有要同步的数据");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
+                }
+                #endregion
+
+                #region 增量同步东方网快讯
+                try
+                {
+                    var taskName = "增量同步东方网快讯";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:ShortNews");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSync<ShortNews>(p,(w)=> { return new object[] { GUID.FromStringToGuid(w.Content) }; });
                                         });
                                     }
                                     catch (Exception ex)

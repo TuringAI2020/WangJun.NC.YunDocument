@@ -438,6 +438,41 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
+        #region 东方财富网快讯更新
+        public RES Update东方财富网快讯(string keyName,string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:ShortNews";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+
+            try
+            {
+                var list = JSON.ToObject<List<ShortNews>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        p.Id = GUID.FromStringToGuid(p.Content);
+                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                        var res2 = REDIS.Current.SortedSetAdd(setName,p,double.Parse(p.PublishTime.ToString("yyyyMMddhhmm")));
+                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+
+                    });
+                }
+                Console.WriteLine($"{MethodBase.GetCurrentMethod().Name} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"BXCODE {ex.Message}");
+            }
+        }
+        #endregion
+
         #region 创建任务 - 北向持股统计
         public RES CreateTask北向持股统计(string jsonReq, string jsonRes)
         {

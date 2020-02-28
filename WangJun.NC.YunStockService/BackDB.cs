@@ -96,6 +96,24 @@ namespace WangJun.NC.YunStockService
                     .HasDefaultValueSql("((0))");
             });
 
+            modelBuilder.Entity<ShortNews>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Content)
+                    .IsRequired()
+                    .HasMaxLength(2048);
+
+                entity.Property(e => e.PublishTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Source)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsFixedLength();
+            });
+
             modelBuilder.Entity<StockCode>(entity =>
             {
                 entity.HasKey(e => e.Code);
@@ -163,10 +181,6 @@ namespace WangJun.NC.YunStockService
                 entity.Property(e => e.持股日期tag).HasColumnName("持股日期Tag");
 
                 entity.Property(e => e.机构名称).HasMaxLength(200);
-
-                entity.Property(e => e.JpCode)
-                    .HasColumnName("jpCode")
-                    .HasMaxLength(200);
 
                 entity.Property(e => e.当日收盘价).HasColumnType("numeric(18, 2)");
 
@@ -240,6 +254,47 @@ namespace WangJun.NC.YunStockService
                 entity.Property(e => e.持股数量占a股百分比)
                     .HasColumnName("持股数量占A股百分比")
                     .HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.机构名称)
+                    .IsRequired()
+                    .HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<北向机构持股明细2>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.JgCode)
+                    .IsRequired()
+                    .HasColumnName("jgCode")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.当日收盘价).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.当日涨跌幅).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值变化10日).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值变化1日).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股市值变化5日).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股数量).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股数量占a股百分比)
+                    .HasColumnName("持股数量占A股百分比")
+                    .HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.持股日期tag).HasColumnName("持股日期Tag");
 
                 entity.Property(e => e.机构名称)
                     .IsRequired()

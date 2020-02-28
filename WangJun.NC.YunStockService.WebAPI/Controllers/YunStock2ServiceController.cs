@@ -53,11 +53,14 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             {
                 res = DataProcNode.GetInst().Update所有机构(jsonReq, jsonRes);
             }
-            else if ("BXCGMXURL" == keyName)
+            else if ("BXCGMXURLTASK" == keyName)
             {
                 res = DataProcNode.GetInst().Update所有北向持股明细链接(jsonReq, jsonRes);
             }
-
+            else if ("SHORTNEWS" == keyName)
+            {
+                res = DataProcNode.GetInst().Update东方财富网快讯(keyName,jsonReq, jsonRes);
+            }
             return res;
         }
     }
