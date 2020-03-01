@@ -216,6 +216,7 @@ namespace WangJun.NC.YunStockService
                     { 
                         list.ForEach(p =>
                         {
+                            p.Id = GUID.FromStringToGuid($"{p.JgCode}_{p.持股日期tag}");
                             var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
                             var setName = $"Stock:{keyName}:{p.机构名称}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);
@@ -243,6 +244,7 @@ namespace WangJun.NC.YunStockService
                     {
                         list.ForEach(p =>
                         {
+                            p.Id = GUID.FromStringToGuid($"{p.Code}_{p.持股日期tag}_{p.JgCode}");
                             var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
                             var setName = $"Stock:{keyName}:{p.机构名称}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);

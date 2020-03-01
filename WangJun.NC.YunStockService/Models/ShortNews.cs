@@ -9,5 +9,6 @@ namespace WangJun.NC.YunStockService.Models
         public string Source { get; set; }
         public DateTime PublishTime { get; set; }
         public string Content { get; set; }
+        public string Href { get; set; }
     }
 }

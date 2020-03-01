@@ -5,6 +5,7 @@ namespace WangJun.NC.YunStockService.Models
 {
     public partial class 北向机构持股明细
     {
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public int 持股日期tag { get; set; }
         public string JgCode { get; set; }

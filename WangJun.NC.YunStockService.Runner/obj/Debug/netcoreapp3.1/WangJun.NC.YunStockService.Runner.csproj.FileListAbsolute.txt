@@ -1,5 +1,3 @@
-D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.AssemblyInfoInputs.cache
-D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.AssemblyInfo.cs
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.exe
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.deps.json
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.runtimeconfig.json
@@ -56,6 +54,8 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.pdb
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunUtils.pdb
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.csprojAssemblyReference.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.AssemblyInfoInputs.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.AssemblyInfo.cs
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.csproj.CopyComplete
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.pdb

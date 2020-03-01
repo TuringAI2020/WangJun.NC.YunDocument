@@ -5,6 +5,7 @@ namespace WangJun.NC.YunStockService.Models
 {
     public partial class 融资融券
     {
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public int 交易日期tag { get; set; }
         public string 交易日期 { get; set; }

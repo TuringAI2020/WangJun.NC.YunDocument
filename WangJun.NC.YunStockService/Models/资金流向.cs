@@ -5,6 +5,7 @@ namespace WangJun.NC.YunStockService.Models
 {
     public partial class 资金流向
     {
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public int 日期tag { get; set; }
         public string 日期 { get; set; }
