@@ -101,9 +101,7 @@ namespace WangJun.NC.YunStockService.Models
                     .IsRequired()
                     .HasMaxLength(2048);
 
-                entity.Property(e => e.Href)
-                    .HasMaxLength(2048)
-                    .IsFixedLength();
+                entity.Property(e => e.Href).HasMaxLength(2048);
 
                 entity.Property(e => e.PublishTime).HasColumnType("datetime");
 
@@ -349,9 +347,12 @@ namespace WangJun.NC.YunStockService.Models
 
             modelBuilder.Entity<财务主要指标>(entity =>
             {
-                entity.HasKey(e => new { e.Code, e.DateTag });
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Code)
+                    .IsRequired()
                     .HasMaxLength(6)
                     .IsFixedLength();
 

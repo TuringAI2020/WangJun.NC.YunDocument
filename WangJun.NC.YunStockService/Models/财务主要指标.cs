@@ -5,6 +5,7 @@ namespace WangJun.NC.YunStockService.Models
 {
     public partial class 财务主要指标
     {
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public int DateTag { get; set; }
         public decimal? 基本每股收益 { get; set; }

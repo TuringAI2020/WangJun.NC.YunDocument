@@ -1068,7 +1068,7 @@ namespace WangJun.NC.YunStockService
                     }
                     #endregion
 
-                    #region 增量同步北向持股统计
+                    #region [废弃]增量同步北向持股统计
                     try
                     {
                         var taskName = "增量同步北向持股统计";
@@ -1297,6 +1297,202 @@ namespace WangJun.NC.YunStockService
                                         keys.ForEach(p =>
                                         {
                                             this.IncSync<北向机构持股明细>(p, (w) => { return new object[] { w.Id }; });
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 同步线程正在运行或无需同步");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
+                }
+                #endregion
+
+                #region 增量同步融资融券
+                try
+                {
+                    var taskName = "增量同步融资融券";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:RZRQ:*");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Console.WriteLine($"{taskName} 同步线程准备启动");
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSync<融资融券>(p, (w) => { return new object[] { w.Id }; });
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 同步线程正在运行或无需同步");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
+                }
+                #endregion
+
+                #region 增量同步资金流向
+                try
+                {
+                    var taskName = "增量同步资金流向";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:ZJLX:*");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Console.WriteLine($"{taskName} 同步线程准备启动");
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSync<资金流向>(p, (w) => { return new object[] { w.Id }; });
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 同步线程正在运行或无需同步");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
+                }
+                #endregion
+
+
+                #region 增量同步财务分析
+                try
+                {
+                    var taskName = "增量同步财务分析";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:CWFX:*");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Console.WriteLine($"{taskName} 同步线程准备启动");
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSync<财务主要指标>(p, (w) => { return new object[] { w.Id }; });
                                         });
                                     }
                                     catch (Exception ex)

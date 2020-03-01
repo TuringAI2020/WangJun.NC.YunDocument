@@ -40,6 +40,18 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             {
                 res = DataProcNode.GetInst().CreateTask北向持股统计(jsonReq, jsonRes);
             }
+            else if ("CreateTask融资融券" == method)
+            {
+                res = DataProcNode.GetInst().CreateTask融资融券(jsonReq, jsonRes);
+            }
+            else if ("CreateTask资金流向" == method)
+            {
+                res = DataProcNode.GetInst().CreateTask资金流向(jsonReq, jsonRes);
+            }
+            else if ("CreateTask财务分析" == method)
+            {
+                res = DataProcNode.GetInst().CreateTask财务分析(jsonReq, jsonRes);
+            }
             return res;
         }
     }

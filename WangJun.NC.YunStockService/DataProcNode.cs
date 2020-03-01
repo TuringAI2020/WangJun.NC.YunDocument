@@ -135,6 +135,7 @@ namespace WangJun.NC.YunStockService
                         var code = list.First().Code;
                         list.ForEach(p =>
                         {
+                            p.Id = GUID.FromStringToGuid($"{p.Code}_{p.交易日期tag}");
                             var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}:{p.Code}";
                             var setName = $"Stock:{keyName}:{p.Code}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);
@@ -148,8 +149,9 @@ namespace WangJun.NC.YunStockService
                     }
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
                         taskDict[listName].Remove(jsonReq);
-                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
                         return res;
                     }
                 }
@@ -162,6 +164,7 @@ namespace WangJun.NC.YunStockService
                         var code = list.First().Code;
                         list.ForEach(p =>
                         {
+                            p.Id = GUID.FromStringToGuid($"{p.Code}_{p.日期tag}");
                             var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}:{p.Code}";
                             var setName = $"Stock:{keyName}:{p.Code}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);
@@ -175,8 +178,9 @@ namespace WangJun.NC.YunStockService
                     }
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
                         taskDict[listName].Remove(jsonReq);
-                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
                         return res;
                     }
                 }
@@ -190,6 +194,7 @@ namespace WangJun.NC.YunStockService
                         var code = list.First().Code;
                         list.ForEach(p =>
                         {
+                            p.Id = GUID.FromStringToGuid($"{p.Code}_{p.DateTag}");
                             var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}:{p.Code}";
                             var setName = $"Stock:{keyName}:{p.Code}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);
@@ -203,8 +208,9 @@ namespace WangJun.NC.YunStockService
                     }
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
                         taskDict[listName].Remove(jsonReq);
-                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
                         return res;
                     }
                 }
@@ -507,6 +513,115 @@ namespace WangJun.NC.YunStockService
                 return RES.FAIL($"CreateTask北向持股统计 {ex.Message}");
             }
         }
-            #endregion
+        #endregion
+
+        #region 创建任务 - 融资融券
+        public RES CreateTask融资融券(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:BaseData:AllCode";
+            var qTaskName = "Stock:Task:RZRQ:Task0";
+
+            try
+            {
+                var count = 0;
+                var total = 0;
+                REDIS.Current.KeyRemove(qTaskName);
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+                    var item = new
+                    {
+                        Code = code,
+                        Url = $"http://data.eastmoney.com/rzrq/detail/{code}.html",
+                        RetryCount = 3
+                    };
+                    var res2 = REDIS.Current.Enqueue(qTaskName, item);
+                    total++;
+                    if (res2.SUCCESS)
+                    {
+                        count++;
+                    }
+                    return true;
+                });
+                res.MESSAGE = $"{MethodBase.GetCurrentMethod().Name} 任务创建完毕 应该创建 {total} 实际 {count}";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{MethodBase.GetCurrentMethod().Name} 任务创建异常 {ex.Message}");
+            }
         }
+        #endregion
+
+        #region 创建任务 - 资金流向
+        public RES CreateTask资金流向(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:BaseData:AllCode";
+            var qTaskName = "Stock:Task:ZJLX:Task0";
+
+            try
+            {
+                var count = 0;
+                var total = 0;
+                REDIS.Current.KeyRemove(qTaskName);
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+                    var item = new
+                    {
+                        Code = code,
+                        Url = $"http://data.eastmoney.com/zjlx/{code}.html",
+                        RetryCount = 3
+                    };
+                    var res2 = REDIS.Current.Enqueue(qTaskName, item);
+                    total++;
+                    if (res2.SUCCESS)
+                    {
+                        count++;
+                    }
+                    return true;
+                });
+                res.MESSAGE = $"{MethodBase.GetCurrentMethod().Name} 任务创建完毕 应该创建 {total} 实际 {count}";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{MethodBase.GetCurrentMethod().Name} 任务创建异常 {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 创建任务 - 财务分析
+        public RES CreateTask财务分析(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:BaseData:AllCode";
+            var qTaskName = "Stock:Task:CWFX:Task0";
+
+            try
+            {
+                var count = 0;
+                var total = 0;
+                REDIS.Current.KeyRemove(qTaskName);
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+                    var code2 = (code[0] == '6') ? "SH" + code : "SZ" + code; 
+                    var item = new
+                    {
+                        Code = code,
+                        Url = $"http://f10.eastmoney.com/f10_v2/FinanceAnalysis.aspx?code={code2}",
+                        RetryCount = 3
+                    };
+                    var res2 = REDIS.Current.Enqueue(qTaskName, item);
+                    total++;
+                    if (res2.SUCCESS)
+                    {
+                        count++;
+                    }
+                    return true;
+                });
+                res.MESSAGE = $"{MethodBase.GetCurrentMethod().Name} 任务创建完毕 应该创建 {total} 实际 {count}";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{MethodBase.GetCurrentMethod().Name} 任务创建异常 {ex.Message}");
+            }
+        }
+        #endregion
+    }
 }
