@@ -36,12 +36,8 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             var jsonReq = this.Request.Form["jsonReq"];
             var jsonRes = this.Request.Form["jsonRes"];
             var res = RES.FAIL("keyName参数未匹配");
-            if ("BXCJMX" == keyName)
-            {
-                res = DataProcNode.GetInst().SaveBXCJMX(keyName, taskId, jsonReq, jsonRes);
-            }
-            else if ("RZRQ" == keyName || "ZJLX" == keyName || "CWFX" == keyName || "BXCGTJ" == keyName
-                || "BXCGMXURL" == keyName)
+            if ("RZRQ" == keyName || "ZJLX" == keyName || "CWFX" == keyName || "BXCGTJ" == keyName
+                || "BXCGMXURL" == keyName|| "BXCJMX" == keyName)
             {
                 res = DataProcNode.GetInst().SaveProcData(keyName, taskId, jsonReq, jsonRes);
             }

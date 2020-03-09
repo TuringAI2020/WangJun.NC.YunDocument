@@ -1458,8 +1458,7 @@ namespace WangJun.NC.YunStockService
                     Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
                 }
                 #endregion
-
-
+                 
                 #region 增量同步财务分析
                 try
                 {
@@ -1493,6 +1492,71 @@ namespace WangJun.NC.YunStockService
                                         keys.ForEach(p =>
                                         {
                                             this.IncSync<财务主要指标>(p, (w) => { return new object[] { w.Id }; });
+                                        });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"{taskName} 任务处理异常: {ex.Message}");
+                                        Thread.Sleep(10 * 1000);
+                                    }
+                                    finally
+                                    {
+                                        lock (this.threads增量同步)
+                                        {
+                                            if (this.threads增量同步.ContainsKey(taskName))
+                                            {
+                                                this.threads增量同步.Remove(taskName);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{taskName} 同步线程正在运行或无需同步");
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"增量同步 检查任务异常 {e.Message}");
+                }
+                #endregion
+
+                #region 增量同步北向成交明细
+                try
+                {
+                    var taskName = "增量同步北向成交明细";
+                    var resKeys = REDIS.Current.QueryKeys("Stock:Sync:2DB:Stock:BXCJMX");
+                    if (resKeys.SUCCESS)
+                    {
+                        var keys = resKeys.DATA as List<string>;
+                        if (null != keys && 0 < keys.Count)
+                        {
+                            var startNewTask = true;
+                            lock (this.threads增量同步)
+                            {
+                                if (!this.threads增量同步.ContainsKey(taskName))
+                                {
+                                    this.threads增量同步.Add(taskName, "Running");
+                                    startNewTask = true;
+                                }
+                                else
+                                {
+                                    startNewTask = false;
+                                }
+                            }
+                            if (startNewTask)
+                            {
+                                Console.WriteLine($"{taskName} 同步线程准备启动");
+                                Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        keys.ForEach(p =>
+                                        {
+                                            this.IncSync<北向成交明细>(p, (w) => { return new object[] { w.Code,w.日期tag }; });
                                         });
                                     }
                                     catch (Exception ex)

@@ -105,10 +105,9 @@ namespace WangJun.NC.YunStockService
                     var list = JSON.ToObject<List<北向成交明细>>(jsonRes);
                     if (null != list && 0 < list.Count)
                     {
-                        var code = list.First().Code;
                         list.ForEach(p =>
-                        {
-                            var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}:{p.Code}";
+                        { 
+                            var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
                             var setName = $"Stock:{keyName}:{p.Code}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);
                             var res2 = REDIS.Current.SortedSetAdd(setName, p, p.日期tag);
@@ -121,8 +120,9 @@ namespace WangJun.NC.YunStockService
                     }
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
                         taskDict[listName].Remove(jsonReq);
-                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
                         return res;
                     }
                 }
@@ -604,6 +604,43 @@ namespace WangJun.NC.YunStockService
                     {
                         Code = code,
                         Url = $"http://f10.eastmoney.com/f10_v2/FinanceAnalysis.aspx?code={code2}",
+                        RetryCount = 3
+                    };
+                    var res2 = REDIS.Current.Enqueue(qTaskName, item);
+                    total++;
+                    if (res2.SUCCESS)
+                    {
+                        count++;
+                    }
+                    return true;
+                });
+                res.MESSAGE = $"{MethodBase.GetCurrentMethod().Name} 任务创建完毕 应该创建 {total} 实际 {count}";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{MethodBase.GetCurrentMethod().Name} 任务创建异常 {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 创建任务 - 北向成交明细
+        public RES CreateTask北向成交明细(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:BXCode";
+            var qTaskName = "Stock:Task:BXCJMX:Task0";
+
+            try
+            {
+                var count = 0;
+                var total = 0;
+                REDIS.Current.KeyRemove(qTaskName);
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+
+                    var item = new
+                    {
+                        Code = code,
+                        Url = $"http://data.eastmoney.com/hsgt/{code}.html",
                         RetryCount = 3
                     };
                     var res2 = REDIS.Current.Enqueue(qTaskName, item);
