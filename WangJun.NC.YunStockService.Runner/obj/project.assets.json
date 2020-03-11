@@ -2,6 +2,19 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
+      "Microsoft.AspNet.WebApi.Client/5.2.4": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.1",
+          "Newtonsoft.Json.Bson": "1.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {}
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/1.1.0": {
         "type": "package",
         "compile": {
@@ -493,6 +506,31 @@
         },
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.1": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "Newtonsoft.Json": "10.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
+        }
+      },
+      "Pathoschild.Http.FluentClient/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.4"
+        },
+        "compile": {
+          "lib/netstandard2.0/Pathoschild.Http.Client.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Pathoschild.Http.Client.dll": {}
         }
       },
       "Pipelines.Sockets.Unofficial/2.0.22": {
@@ -1949,6 +1987,15 @@
           "ref/netstandard1.3/System.Text.Encoding.Extensions.dll": {}
         }
       },
+      "System.Text.Encodings.Web/4.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/System.Text.Encodings.Web.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Text.Encodings.Web.dll": {}
+        }
+      },
       "System.Text.RegularExpressions/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -2117,6 +2164,20 @@
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
       },
+      "TencentCloudSDK/3.0.45": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.1",
+          "Pathoschild.Http.FluentClient": "3.2.0",
+          "System.Text.Encodings.Web": "4.4.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/TencentCloud.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/TencentCloud.dll": {}
+        }
+      },
       "WangJun.NC.YunStockService/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
@@ -2143,7 +2204,8 @@
           "Microsoft.Extensions.Configuration": "3.1.0",
           "Microsoft.Extensions.Configuration.Json": "3.1.0",
           "Newtonsoft.Json": "12.0.2",
-          "StackExchange.Redis": "2.0.601"
+          "StackExchange.Redis": "2.0.601",
+          "TencentCloudSDK": "3.0.45"
         },
         "compile": {
           "bin/placeholder/WangJun.NC.YunUtils.dll": {}
@@ -2155,6 +2217,23 @@
     }
   },
   "libraries": {
+    "Microsoft.AspNet.WebApi.Client/5.2.4": {
+      "sha512": "OdBVC2bQWkf9qDd7Mt07ev4SwIdu6VmLBMTWC0D5cOP/HWSXyv/77otwtXVrAo42duNjvXOjzjP5oOI9m1+DTQ==",
+      "type": "package",
+      "path": "microsoft.aspnet.webapi.client/5.2.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/System.Net.Http.Formatting.dll",
+        "lib/net45/System.Net.Http.Formatting.xml",
+        "lib/netstandard2.0/System.Net.Http.Formatting.dll",
+        "lib/netstandard2.0/System.Net.Http.Formatting.xml",
+        "lib/portable-wp8+netcore45+net45+wp81+wpa81/System.Net.Http.Formatting.dll",
+        "lib/portable-wp8+netcore45+net45+wp81+wpa81/System.Net.Http.Formatting.xml",
+        "microsoft.aspnet.webapi.client.5.2.4.nupkg.sha512",
+        "microsoft.aspnet.webapi.client.nuspec"
+      ]
+    },
     "Microsoft.Bcl.AsyncInterfaces/1.1.0": {
       "sha512": "1Am6l4Vpn3/K32daEqZI+FFr96OlZkgwK2LcT3pZ2zWubR5zTPW3/FkO1Rat9kb7oQOa4rxgl9LJHc5tspCWfg==",
       "type": "package",
@@ -2901,6 +2980,38 @@
         "lib/portable-net45+win8+wp8+wpa81/Newtonsoft.Json.xml",
         "newtonsoft.json.12.0.2.nupkg.sha512",
         "newtonsoft.json.nuspec"
+      ]
+    },
+    "Newtonsoft.Json.Bson/1.0.1": {
+      "sha512": "5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
+      "type": "package",
+      "path": "newtonsoft.json.bson/1.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/Newtonsoft.Json.Bson.dll",
+        "lib/net45/Newtonsoft.Json.Bson.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.Bson.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.Bson.xml",
+        "newtonsoft.json.bson.1.0.1.nupkg.sha512",
+        "newtonsoft.json.bson.nuspec"
+      ]
+    },
+    "Pathoschild.Http.FluentClient/3.2.0": {
+      "sha512": "DLivarfAfeo3XBEdseclcDgqCUb0WokEADtooGuel0TXo3xo8M3lvm/XC/lOYC3YMCaxeQBVSjMDIugPcPDH+g==",
+      "type": "package",
+      "path": "pathoschild.http.fluentclient/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/Pathoschild.Http.Client.dll",
+        "lib/net45/Pathoschild.Http.Client.xml",
+        "lib/netstandard1.3/Pathoschild.Http.Client.dll",
+        "lib/netstandard1.3/Pathoschild.Http.Client.xml",
+        "lib/netstandard2.0/Pathoschild.Http.Client.dll",
+        "lib/netstandard2.0/Pathoschild.Http.Client.xml",
+        "pathoschild.http.fluentclient.3.2.0.nupkg.sha512",
+        "pathoschild.http.fluentclient.nuspec"
       ]
     },
     "Pipelines.Sockets.Unofficial/2.0.22": {
@@ -6643,6 +6754,25 @@
         "system.text.encoding.extensions.nuspec"
       ]
     },
+    "System.Text.Encodings.Web/4.4.0": {
+      "sha512": "l/tYeikqMHX2MD2jzrHDfR9ejrpTTF7wvAEbR51AMvzip1wSJgiURbDik4iv/w7ZgytmTD/hlwpplEhF9bmFNw==",
+      "type": "package",
+      "path": "system.text.encodings.web/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/System.Text.Encodings.Web.dll",
+        "lib/netstandard1.0/System.Text.Encodings.Web.xml",
+        "lib/netstandard2.0/System.Text.Encodings.Web.dll",
+        "lib/netstandard2.0/System.Text.Encodings.Web.xml",
+        "system.text.encodings.web.4.4.0.nupkg.sha512",
+        "system.text.encodings.web.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Text.RegularExpressions/4.3.0": {
       "sha512": "RpT2DA+L660cBt1FssIE9CAGpLFdFPuheB7pLpKpn6ZXNby7jDERe8Ua/Ne2xGiwLVG2JOqziiaVCGDon5sKFA==",
       "type": "package",
@@ -7200,6 +7330,19 @@
         "runtimes/aot/lib/netcore50/System.Xml.XmlSerializer.dll",
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
+      ]
+    },
+    "TencentCloudSDK/3.0.45": {
+      "sha512": "JPhBt2uXVyGq5+AFxl41FnFee9B0T2W6WOf1EN439V9AjiK7A6L+xFbr04OsycgrXAR36TvBrkXrbHV3z7AKrQ==",
+      "type": "package",
+      "path": "tencentcloudsdk/3.0.45",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/TencentCloud.dll",
+        "lib/netstandard2.0/TencentCloud.dll",
+        "tencentcloudsdk.3.0.45.nupkg.sha512",
+        "tencentcloudsdk.nuspec"
       ]
     },
     "WangJun.NC.YunStockService/1.0.0": {

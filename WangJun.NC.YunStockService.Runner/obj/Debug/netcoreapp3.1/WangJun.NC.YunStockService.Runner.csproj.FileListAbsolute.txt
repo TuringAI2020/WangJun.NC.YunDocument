@@ -59,3 +59,7 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.csproj.CopyComplete
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Pathoschild.Http.Client.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\TencentCloud.dll
