@@ -21,7 +21,9 @@ namespace WangJun.NC.YunStockService
             try
             {
                 var setName = "Stock:ShortNews";
-                var res  = REDIS.Current.SortedSetQuery(setName, 202003090000, 202003099999, true, 0, 10);
+                var startDateTag = long.Parse(DateTime.Now.Date.ToString("yyyyMMdd0000"));
+                var endDateTag = long.Parse(DateTime.Now.Date.ToString("yyyyMMdd9999"));
+                var res  = REDIS.Current.SortedSetQuery(setName, startDateTag, endDateTag, true, 0, 10);
                 return res;
             }
             catch (Exception ex)

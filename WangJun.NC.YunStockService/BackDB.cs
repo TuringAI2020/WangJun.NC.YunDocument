@@ -8,6 +8,7 @@ namespace WangJun.NC.YunStockService
     public partial class BackDB :  WangJun.NC.YunUtils.DB
     {
         private static BackDB backDB = null;
+        private string connectionString = "Data Source=.\\SQL2017;Initial Catalog=WangJunStock;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public static BackDB Current
         {
             get
@@ -28,6 +29,15 @@ namespace WangJun.NC.YunStockService
             }
         }
 
+        public static BackDB GetInst(string tagName) {
+            var inst = new BackDB();
+            if ("WangJunAI" == tagName)
+            {
+                inst.connectionString = "Data Source=.\\SQL2017;Initial Catalog=WangJunAI;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            }
+            return inst;
+        }
+
         public BackDB()
         {
         }
@@ -42,7 +52,7 @@ namespace WangJun.NC.YunStockService
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=.\\SQL2017;Initial Catalog=WangJunStock;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+                optionsBuilder.UseSqlServer(this.connectionString);
             }
         }
 
