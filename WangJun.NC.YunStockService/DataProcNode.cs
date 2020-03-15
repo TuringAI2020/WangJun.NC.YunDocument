@@ -279,73 +279,82 @@ namespace WangJun.NC.YunStockService
         }
 
         private static Dictionary<string, Dictionary<string, int>> taskDict = new Dictionary<string, Dictionary<string, int>>();
-        public RES GetTask(string taskId)
-        {
-            if (!taskDict.ContainsKey(taskId))
-            {
-                taskDict.Add(taskId, new Dictionary<string, int>());
-            }
-
-            if (taskDict[taskId].Count <= 15)
-            {
-                var res = REDIS.Current.GetListLastItems($"Stock:Task:BXCGMX:{taskId}", -1000);
-                var list = res.DATA as List<string>;
-                if (null != list)
-                {
-                    list.ForEach(p =>
-                    {
-                        if (!taskDict[taskId].ContainsKey(p))
-                        {
-                            taskDict[taskId].Add(p, 0);
-                        }
-                    });
-                }
-            }
-
-            if (0 == taskDict[taskId].Values.Count(p => p == 0))
-            {
-                return RES.FAIL($"暂无可用任务,全部已分配{taskId} {taskDict[taskId].Count} { taskDict[taskId].Values.Count(p => p == 0)}");
-            }
-
-            var task = taskDict[taskId].First(p => p.Value == 0);
-            taskDict[taskId][task.Key] = 1;
-            Console.WriteLine($"任务分配情况 {taskId} {taskDict[taskId].Count} { taskDict[taskId].Values.Count(p => p == 0)}");
-            return RES.OK(task.Key);
-        }
-
+ 
         public RES GetTask(string keyName, string taskId)
         {
             var listName = $"Stock:Task:{keyName}:{taskId}";
-            if (!taskDict.ContainsKey(listName))
+            //if (!taskDict.ContainsKey(listName))
+            //{
+            //    taskDict.Add(listName, new Dictionary<string, int>());
+            //}
+            var res = REDIS.Current.GetListLastItems(listName, -1000);
+            var list = res.DATA as List<string>;
+            if (null != list)
             {
-                taskDict.Add(listName, new Dictionary<string, int>());
-            }
-
-            if (taskDict[listName].Count <= 15)
-            {
-                var res = REDIS.Current.GetListLastItems(listName, -1000);
-                var list = res.DATA as List<string>;
-                if (null != list)
+                var res4 = RES.FAIL("尚未进行任务分配");
+                var hasFound = false;
+                list.ForEach(p =>
                 {
-                    list.ForEach(p =>
+                    if (!hasFound)
                     {
-                        if (!taskDict[listName].ContainsKey(p))
+                        var res2 = this.IsExistTaskStatus(listName, JSON.ToJson(JSON.ToObject<Dictionary<string,object>>(p)));
+                        if (!res2.SUCCESS)
                         {
-                            taskDict[listName].Add(p, 0);
+                            var res3 = this.SaveTaskStatus(listName, p);
+                            hasFound = true;
+                            res4 = RES.OK(p);
                         }
-                    });
-                }
+                    }
+                    //if (!taskDict[listName].ContainsKey(p))
+                    //{
+                    //    taskDict[listName].Add(p, 0);
+                    //}
+                });
+                return res4;
             }
+            return RES.FAIL($"{listName} 为空");
+            //if (taskDict[listName].Count <= 15)
+            //{
 
-            if (0 == taskDict[listName].Values.Count(p => p == 0))
-            {
-                return RES.FAIL($"暂无可用任务,全部已分配{listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
+            //}
+
+            //if (0 == taskDict[listName].Values.Count(p => p == 0))
+            //{
+            //    return RES.FAIL($"暂无可用任务,全部已分配{listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
+            //}
+
+            //var task = taskDict[listName].First(p => p.Value == 0);
+            //taskDict[listName][task.Key] = 1;
+            //Console.WriteLine($"任务分配情况 {listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
+            //return RES.OK(task.Key);
+        }
+
+        protected RES SaveTaskStatus(string keyName,string val)
+        {
+            var id = GUID.FromStringToGuid(val);
+            var taskStatusKeyName = $"Stock:Task:Status:{keyName}:{id}";
+            var res = REDIS.Current.CacheSet(taskStatusKeyName, val, new TimeSpan(0, 5, 0));
+            return res;
+        }
+
+        protected RES RemoveTaskStatus(string keyName, string val)
+        {
+            var id = GUID.FromStringToGuid(val);
+            var taskStatusKeyName = $"Stock:Task:Status:{keyName}:{id}";
+            var res = REDIS.Current.KeyRemove(taskStatusKeyName);
+            return res;
+        }
+
+        protected RES IsExistTaskStatus(string keyName, string val)
+        {
+            var id = GUID.FromStringToGuid(val);
+            var taskStatusKeyName = $"Stock:Task:Status:{keyName}:{id}";
+            var res = REDIS.Current.QueryKeys(taskStatusKeyName);
+            var keys = res.DATA as List<string>;
+            if (keys.Contains(taskStatusKeyName)) {
+                return RES.OK(taskStatusKeyName);
             }
-
-            var task = taskDict[listName].First(p => p.Value == 0);
-            taskDict[listName][task.Key] = 1;
-            Console.WriteLine($"任务分配情况 {listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
-            return RES.OK(task.Key);
+            return RES.FAIL(keys);
         }
 
         #region 北向代码更新

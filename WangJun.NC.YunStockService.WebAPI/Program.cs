@@ -22,7 +22,7 @@ namespace WangJun.NC.YunStockService.WebAPI
                 { 
                     webBuilder
                     .UseStartup<Startup>()
-                    .UseUrls("http://*:80")
+                    .UseUrls("http://*:80", "http://*:5000")
                     .ConfigureKestrel(options=> {
                         options.Limits.MaxRequestBodySize = int.MaxValue;
                     });
