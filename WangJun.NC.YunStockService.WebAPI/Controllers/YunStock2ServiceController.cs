@@ -55,7 +55,7 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             }
             else if ("SHORTNEWS" == keyName)
             {
-                res = DataProcNode.GetInst().Update东方财富网快讯(keyName,jsonReq, jsonRes);
+                res = DataProcNode.GetInst().UpdateShortNews(keyName,jsonReq, jsonRes);
             }
             return res;
         }

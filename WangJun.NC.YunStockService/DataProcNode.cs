@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using WangJun.NC.YunStockService.Models;
 using WangJun.NC.YunUtils;
 
@@ -16,82 +17,6 @@ namespace WangJun.NC.YunStockService
             return inst;
         }
 
-        public RES SaveBXCGMX(string taskId, string jsonReq, string jsonRes)
-        {
-            try
-            {
-                var list = JSON.ToObject<List<北向持股明细>>(jsonRes);
-                var count = 0;
-                if (null != list && 0 < list.Count)
-                {
-                    var code = list.First().Code;
-                    list.ForEach(p =>
-                    {
-                        var qSyncName = $"Stock:Sync:2DB:Stock:BXCGMX:{p.Code}";
-                        var setName = $"Stock:BXCGMX:{p.Code}";
-                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
-                        var res2 = REDIS.Current.SortedSetAdd(setName, p, p.持股日期tag);
-                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
-                        if (res.SUCCESS)
-                        {
-                            count += 1;
-                        }
-                    });
-
-                    taskDict[taskId].Remove(jsonReq);
-                    if (count == list.Count)
-                    {
-                        var listName = $"Stock:Task:BXCGMX:{taskId}";
-                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
-                        return res;
-                    }
-                    return RES.FAIL($"未完全更新 {code}");
-                }
-                return RES.FAIL($"传入参数无效或数据为空");
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex.Message);
-            }
-        }
-
-        public RES SaveBXCJMX(string keyName, string taskId, string jsonReq, string jsonRes)
-        {
-            var listName = $"Stock:Task:{keyName}:{taskId}";
-
-            try
-            {
-                var list = JSON.ToObject<List<北向成交明细>>(jsonRes);
-                var count = 0;
-                if (null != list && 0 < list.Count)
-                {
-                    var code = list.First().Code;
-                    list.ForEach(p =>
-                    {
-                        var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}:{p.Code}";
-                        var setName = $"Stock:{keyName}:{p.Code}";
-                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
-                        var res2 = REDIS.Current.SortedSetAdd(setName, p, p.日期tag);
-                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
-                        if (res.SUCCESS)
-                        {
-                            count += 1;
-                        }
-                    });
-                }
-                if ((0 < list.Count && count == list.Count) || 0 == list.Count)
-                {
-                    taskDict[listName].Remove(jsonReq);
-                    var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
-                    return res;
-                }
-                return RES.FAIL($"传入参数无效");
-            }
-            catch (Exception ex)
-            {
-                return RES.FAIL(ex.Message);
-            }
-        }
 
         public RES SaveProcData(string keyName, string taskId, string jsonReq, string jsonRes)
         {
@@ -106,7 +31,7 @@ namespace WangJun.NC.YunStockService
                     if (null != list && 0 < list.Count)
                     {
                         list.ForEach(p =>
-                        { 
+                        {
                             var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
                             var setName = $"Stock:{keyName}:{p.Code}";
                             var res1 = REDIS.Current.Enqueue(qSyncName, p);
@@ -121,8 +46,8 @@ namespace WangJun.NC.YunStockService
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
                         jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
-                        taskDict[listName].Remove(jsonReq);
                         var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
                         return res;
                     }
                 }
@@ -150,8 +75,8 @@ namespace WangJun.NC.YunStockService
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
                         jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
-                        taskDict[listName].Remove(jsonReq);
                         var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
                         return res;
                     }
                 }
@@ -179,8 +104,8 @@ namespace WangJun.NC.YunStockService
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
                         jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
-                        taskDict[listName].Remove(jsonReq);
                         var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
                         return res;
                     }
                 }
@@ -209,17 +134,17 @@ namespace WangJun.NC.YunStockService
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
                         jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
-                        taskDict[listName].Remove(jsonReq);
                         var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
                         return res;
                     }
                 }
                 else if ("BXCGTJ" == keyName)
                 {
-                    var count = 0; 
+                    var count = 0;
                     var list = JSON.ToObject<List<北向持股统计>>(jsonRes);
                     if (null != list && 0 < list.Count)
-                    { 
+                    {
                         list.ForEach(p =>
                         {
                             p.Id = GUID.FromStringToGuid($"{p.JgCode}_{p.持股日期tag}");
@@ -237,8 +162,8 @@ namespace WangJun.NC.YunStockService
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
                         jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
-                        taskDict[listName].Remove(jsonReq);
-                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, 1);
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
                         return res;
                     }
                 }
@@ -265,8 +190,8 @@ namespace WangJun.NC.YunStockService
                     if ((0 < list.Count && count == list.Count) || 0 == list.Count)
                     {
                         jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
-                        taskDict[listName].Remove(jsonReq);
                         var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
                         return res;
                     }
                 }
@@ -278,15 +203,11 @@ namespace WangJun.NC.YunStockService
             }
         }
 
-        private static Dictionary<string, Dictionary<string, int>> taskDict = new Dictionary<string, Dictionary<string, int>>();
- 
+
         public RES GetTask(string keyName, string taskId)
         {
             var listName = $"Stock:Task:{keyName}:{taskId}";
-            //if (!taskDict.ContainsKey(listName))
-            //{
-            //    taskDict.Add(listName, new Dictionary<string, int>());
-            //}
+
             var res = REDIS.Current.GetListLastItems(listName, -1000);
             var list = res.DATA as List<string>;
             if (null != list)
@@ -297,7 +218,7 @@ namespace WangJun.NC.YunStockService
                 {
                     if (!hasFound)
                     {
-                        var res2 = this.IsExistTaskStatus(listName, JSON.ToJson(JSON.ToObject<Dictionary<string,object>>(p)));
+                        var res2 = this.IsExistTaskStatus(listName, JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(p)));
                         if (!res2.SUCCESS)
                         {
                             var res3 = this.SaveTaskStatus(listName, p);
@@ -305,31 +226,15 @@ namespace WangJun.NC.YunStockService
                             res4 = RES.OK(p);
                         }
                     }
-                    //if (!taskDict[listName].ContainsKey(p))
-                    //{
-                    //    taskDict[listName].Add(p, 0);
-                    //}
+
                 });
                 return res4;
             }
             return RES.FAIL($"{listName} 为空");
-            //if (taskDict[listName].Count <= 15)
-            //{
 
-            //}
-
-            //if (0 == taskDict[listName].Values.Count(p => p == 0))
-            //{
-            //    return RES.FAIL($"暂无可用任务,全部已分配{listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
-            //}
-
-            //var task = taskDict[listName].First(p => p.Value == 0);
-            //taskDict[listName][task.Key] = 1;
-            //Console.WriteLine($"任务分配情况 {listName} {taskDict[listName].Count} { taskDict[listName].Values.Count(p => p == 0)}");
-            //return RES.OK(task.Key);
         }
 
-        protected RES SaveTaskStatus(string keyName,string val)
+        protected RES SaveTaskStatus(string keyName, string val)
         {
             var id = GUID.FromStringToGuid(val);
             var taskStatusKeyName = $"Stock:Task:Status:{keyName}:{id}";
@@ -351,7 +256,8 @@ namespace WangJun.NC.YunStockService
             var taskStatusKeyName = $"Stock:Task:Status:{keyName}:{id}";
             var res = REDIS.Current.QueryKeys(taskStatusKeyName);
             var keys = res.DATA as List<string>;
-            if (keys.Contains(taskStatusKeyName)) {
+            if (keys.Contains(taskStatusKeyName))
+            {
                 return RES.OK(taskStatusKeyName);
             }
             return RES.FAIL(keys);
@@ -378,7 +284,7 @@ namespace WangJun.NC.YunStockService
                         {
                             count += 1;
                         }
-                         
+
                     });
                 }
                 Console.WriteLine($"{MethodBase.GetCurrentMethod().Name} 传入 {list.Count} 实际 {count}");
@@ -427,10 +333,10 @@ namespace WangJun.NC.YunStockService
 
         #region 所有北向持股明细链接
         public RES Update所有北向持股明细链接(string jsonReq, string jsonRes)
-        { 
+        {
             try
             {
-                var list = JSON.ToObject<List<Dictionary<string,string>>>(jsonRes);
+                var list = JSON.ToObject<List<Dictionary<string, string>>>(jsonRes);
                 var count = 0;
                 if (null != list && 0 < list.Count)
                 {
@@ -438,7 +344,7 @@ namespace WangJun.NC.YunStockService
                     {
                         var dateTag = p["DateTag"];
                         var listName = $"Stock:Task:BXCGMXURL:{dateTag}";
-                        var res = REDIS.Current.Enqueue(listName,p);
+                        var res = REDIS.Current.Enqueue(listName, p);
                         if (res.SUCCESS)
                         {
                             count += 1;
@@ -456,7 +362,7 @@ namespace WangJun.NC.YunStockService
         #endregion
 
         #region 东方财富网快讯更新
-        public RES Update东方财富网快讯(string keyName,string jsonReq, string jsonRes)
+        public RES UpdateShortNews(string keyName, string jsonReq, string jsonRes)
         {
             var setName = $"Stock:ShortNews";
             var qSyncName = $"Stock:Sync:2DB:{setName}";
@@ -471,7 +377,7 @@ namespace WangJun.NC.YunStockService
                     {
                         p.Id = GUID.FromStringToGuid(p.Content);
                         var res1 = REDIS.Current.Enqueue(qSyncName, p);
-                        var res2 = REDIS.Current.SortedSetAdd(setName,p,double.Parse(p.PublishTime.ToString("yyyyMMddhhmm")));
+                        var res2 = REDIS.Current.SortedSetAdd(setName, p, double.Parse(p.PublishTime.ToString("yyyyMMddhhmm")));
                         var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
                         if (res.SUCCESS)
                         {
@@ -501,15 +407,18 @@ namespace WangJun.NC.YunStockService
                 var count = 0;
                 var total = 0;
                 REDIS.Current.KeyRemove(qTaskName);
-                var res = REDIS.Current.SortedSetTraverse(setName, "*", (dictName2, href, score, count2, index2) => {
-                    var item =new {
-                                             Score = score,
-                                             Url= href,
-                                             RetryCount=  3
-                                            };
+                var res = REDIS.Current.SortedSetTraverse(setName, "*", (dictName2, href, score, count2, index2) =>
+                {
+                    var item = new
+                    {
+                        Score = score,
+                        Url = href,
+                        RetryCount = 3
+                    };
                     var res2 = REDIS.Current.Enqueue(qTaskName, item);
                     total++;
-                    if (res2.SUCCESS) {
+                    if (res2.SUCCESS)
+                    {
                         count++;
                     }
                     return true;
@@ -535,7 +444,8 @@ namespace WangJun.NC.YunStockService
                 var count = 0;
                 var total = 0;
                 REDIS.Current.KeyRemove(qTaskName);
-                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) =>
+                {
                     var item = new
                     {
                         Code = code,
@@ -571,7 +481,8 @@ namespace WangJun.NC.YunStockService
                 var count = 0;
                 var total = 0;
                 REDIS.Current.KeyRemove(qTaskName);
-                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) =>
+                {
                     var item = new
                     {
                         Code = code,
@@ -607,8 +518,9 @@ namespace WangJun.NC.YunStockService
                 var count = 0;
                 var total = 0;
                 REDIS.Current.KeyRemove(qTaskName);
-                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
-                    var code2 = (code[0] == '6') ? "SH" + code : "SZ" + code; 
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) =>
+                {
+                    var code2 = (code[0] == '6') ? "SH" + code : "SZ" + code;
                     var item = new
                     {
                         Code = code,
@@ -644,7 +556,8 @@ namespace WangJun.NC.YunStockService
                 var count = 0;
                 var total = 0;
                 REDIS.Current.KeyRemove(qTaskName);
-                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) => {
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) =>
+                {
 
                     var item = new
                     {

@@ -91,6 +91,17 @@ namespace WangJun.NC.YunStockService
                     .HasMaxLength(200);
             });
 
+            modelBuilder.Entity<Keywords>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Keyword)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<RelationConception>(entity =>
             {
                 entity.HasKey(e => new { e.Code, e.Conception });

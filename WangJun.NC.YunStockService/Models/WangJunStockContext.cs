@@ -17,6 +17,7 @@ namespace WangJun.NC.YunStockService.Models
 
         public virtual DbSet<Conception> Conception { get; set; }
         public virtual DbSet<Hxtc> Hxtc { get; set; }
+        public virtual DbSet<Keywords> Keywords { get; set; }
         public virtual DbSet<RelationConception> RelationConception { get; set; }
         public virtual DbSet<ShortNews> ShortNews { get; set; }
         public virtual DbSet<StockCode> StockCode { get; set; }
@@ -74,6 +75,17 @@ namespace WangJun.NC.YunStockService.Models
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<Keywords>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Keyword)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<RelationConception>(entity =>

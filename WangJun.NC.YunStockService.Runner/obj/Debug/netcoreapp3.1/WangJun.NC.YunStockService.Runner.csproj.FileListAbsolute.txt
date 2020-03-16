@@ -4,6 +4,7 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.runtimeconfig.dev.json
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll
@@ -32,6 +33,8 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Pathoschild.Http.Client.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Pipelines.Sockets.Unofficial.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\StackExchange.Redis.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
@@ -40,6 +43,7 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Security.Permissions.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\TencentCloud.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
@@ -59,7 +63,3 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.csproj.CopyComplete
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.pdb
-D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
-D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
-D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\Pathoschild.Http.Client.dll
-D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\bin\Debug\netcoreapp3.1\TencentCloud.dll
