@@ -25,6 +25,14 @@ namespace WangJun.NC.YunStockService.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors(options=> {
+                options.AddPolicy("any", builder =>
+
+                    builder.WithOrigins("file:///D:/WangJunCode2020/WangJunStockWeb/WangJunStockWeb/")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                ) ;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +51,9 @@ namespace WangJun.NC.YunStockService.WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors("any");
+
         }
     }
 }

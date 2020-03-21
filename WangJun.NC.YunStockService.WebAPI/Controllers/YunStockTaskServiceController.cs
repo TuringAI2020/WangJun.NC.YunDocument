@@ -35,7 +35,7 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             var jsonReq = this.Request.Form["jsonReq"];
             var jsonRes = this.Request.Form["jsonRes"];
             var res = RES.FAIL("method参数未匹配");
-             
+
             if ("CreateTask北向持股统计" == method)
             {
                 res = DataProcNode.GetInst().CreateTask北向持股统计(jsonReq, jsonRes);
@@ -55,6 +55,10 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             else if ("CreateTask北向成交明细" == method)
             {
                 res = DataProcNode.GetInst().CreateTask北向成交明细(jsonReq, jsonRes);
+            }
+            else if ("" == method)
+            {
+
             }
             return res;
         }

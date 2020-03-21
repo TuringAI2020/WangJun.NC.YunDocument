@@ -11,3 +11,5 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService\obj\Release
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService\obj\Release\netcoreapp3.1\WangJun.NC.YunStockService.csproj.CopyComplete
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService\obj\Release\netcoreapp3.1\WangJun.NC.YunStockService.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService\obj\Release\netcoreapp3.1\WangJun.NC.YunStockService.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService\obj\Release\netcoreapp3.1\WangJun.NC.YunStockService.csproj.CoreCompileInputs.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService\obj\Release\netcoreapp3.1\WangJun.NC.YunStockService.genruntimeconfig.cache

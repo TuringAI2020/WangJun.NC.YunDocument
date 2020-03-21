@@ -297,6 +297,76 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
+        #region 全部代码更新
+        public RES UpdateALLCode(string jsonReq, string jsonRes)
+        {
+            var methodName = MethodBase.GetCurrentMethod().Name;
+            var setName = $"Stock:ALLCode";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+
+            try
+            {
+                var list = JSON.ToObject<List<StockCode>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                        var res2 = REDIS.Current.DictAdd(setName, p.Code, p.Name);
+                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+
+                    });
+                }
+                Console.WriteLine($"{methodName} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{methodName} {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 全部概念更新
+        public RES UpdateALLConception(string jsonReq, string jsonRes)
+        {
+            var methodName = MethodBase.GetCurrentMethod().Name;
+            var setName = $"Stock:ALLConception";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+
+            try
+            {
+                var list = JSON.ToObject<List<Conception>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                        var res2 = REDIS.Current.SetAdd(setName,p);
+                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+
+                    });
+                }
+                Console.WriteLine($"{methodName} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{methodName} {ex.Message}");
+            }
+        }
+        #endregion
+
         #region 所有机构更新
         public RES Update所有机构(string jsonReq, string jsonRes)
         {

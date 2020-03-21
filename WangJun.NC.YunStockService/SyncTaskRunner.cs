@@ -21,37 +21,7 @@ namespace WangJun.NC.YunStockService
             return inst;
         }
 
-        #region 旧代码
-        #region 同步股票代码
-        protected void SyncStockCode()
-        {
-            var dictName = "Stock:BaseData:AllCode";
-            REDIS.Current.DictTraverse(dictName, "*", (dictName, key, value, count, index) =>
-            {
-                Console.WriteLine($"{key} {value} {index} {count}");
-                var prefix = "SZ";
-                if (key.StartsWith("6"))
-                {
-                    prefix = "SH";
-                }
-                BackDB.Current.Save<StockCode>(new StockCode { Code = key, Name = value, Prefix = prefix }, null, new object[] { key });
-                return true;
-            });
-        }
-        #endregion
-
-        #region 同步概念名称
-        protected void SyncConception()
-        {
-            var setName = "Stock:BaseData:AllConception";
-            REDIS.Current.SetTraverse(setName, "*", (setName, item, count, index) =>
-            {
-                Console.WriteLine($"{item} {index} {count}");
-                BackDB.Current.Save<Conception>(new Conception { Name = item }, null, new object[] { item });
-                return true;
-            });
-        }
-        #endregion
+        #region 旧代码  
 
         #region 同步核心题材
         protected void SyncHXTC()
@@ -111,40 +81,7 @@ namespace WangJun.NC.YunStockService
             });
         }
         #endregion
-
-        #region 同步北向代码
-        protected void 同步北向代码()
-        {
-            var setName = $"Stock:BXCode";
-            var qSyncName = $"Stock:Sync:2DB:{setName}";
-            var db = BackDB.New;
-            var qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
-            do
-            {
-                if (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>)
-                {
-                    try
-                    {
-                        object qData = qRes.DATA;
-
-                        var jsonStr = JSON.ToJson(qData);
-                        var jsonData = JSON.ToObject<北向代码>(jsonStr);
-                        var dbRes = db.Save<北向代码>(jsonData, null, new object[] { jsonData.Code });
-                        Console.WriteLine($"同步北向代码 {dbRes} {jsonStr}");
-
-                    }
-                    catch (Exception e)
-                    {
-                        REDIS.Current.Enqueue(qSyncName, qRes.DATA);
-                        Console.WriteLine($"同步北向代码异常 {e.Message} {qSyncName} {JSON.ToJson(qRes)}");
-                        Thread.Sleep(10 * 1000);
-                    }
-                }
-                qRes = REDIS.Current.Dequeue<Dictionary<string, object>>(qSyncName);
-            }
-            while (qRes.SUCCESS && qRes.DATA is Dictionary<string, object>);
-        }
-        #endregion
+         
 
         #region 同步所有机构
         protected void 同步所有机构()
@@ -290,44 +227,7 @@ namespace WangJun.NC.YunStockService
             while (true)
             {
                 if (false)
-                {
-
-                    #region 重要代码同步
-                    try
-                    {
-                        var keyName = "Stock:Sync:2Redis:重要代码";
-                        var res = REDIS.Current.CacheGet<string>(keyName);
-                        if (!res.SUCCESS)
-                        {
-                            this.反向同步重要代码();
-                            REDIS.Current.CacheSet(keyName, DateTime.Now.ToString(), new TimeSpan(3, 0, 0));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"执行反向同步重要代码任务出现异常 {ex.Message}");
-                    }
-                    #endregion 
-
-                    #region 北向代码同步
-                    try
-                    {
-                        var setName = $"Stock:BXCode";
-                        var qSyncName = $"Stock:Sync:2DB:{setName}";
-                        var keyName = $"Stock:Sync:2DB:Check:{setName}";
-                        var res = REDIS.Current.CacheGet<string>(keyName);
-                        if (!res.SUCCESS)
-                        {
-                            this.同步北向代码();
-                            REDIS.Current.CacheSet(keyName, DateTime.Now.ToString(), new TimeSpan(3, 0, 0));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"执行北向代码同步任务出现异常 {ex.Message}");
-                    }
-                    #endregion
-
+                { 
                     #region 所有机构同步
                     try
                     {
@@ -345,9 +245,7 @@ namespace WangJun.NC.YunStockService
                     {
                         Console.WriteLine($"执行所有机构同步任务出现异常 {ex.Message}");
                     }
-                    #endregion
-
-
+                    #endregion 
                 }
                  
                 this.ExecuteIncSyncTask<ShortNews>("增量同步东方网快讯", "Stock:Sync:2DB:Stock:ShortNews", (w) => {
@@ -374,11 +272,11 @@ namespace WangJun.NC.YunStockService
                     return new object[] { w.Id };
                 });
 
-                this.ExecuteIncSyncTask<融资融券>("增量同步融资融券", "Stock:Sync:2DB:Stock:RZRQ:*", (w) => {
+                this.ExecuteIncSyncTask<融资融券>($"增量同步{nameof(融资融券)}", "Stock:Sync:2DB:Stock:RZRQ:*", (w) => {
                     return new object[] { w.Id };
                 });
 
-                this.ExecuteIncSyncTask<资金流向>("增量同步资金流向", "Stock:Sync:2DB:Stock:ZJLX:*", (w) => {
+                this.ExecuteIncSyncTask<资金流向>($"增量同步{nameof(资金流向)}", "Stock:Sync:2DB:Stock:ZJLX:*", (w) => {
                     return new object[] { w.Id };
                 });
 
@@ -394,6 +292,16 @@ namespace WangJun.NC.YunStockService
                     return new object[] { w.Id }; 
                 });
 
+                this.ExecuteIncSyncTask<北向代码>($"增量同步{nameof(北向代码)}", "Stock:Sync:2DB:Stock:BXCode", (w) => {
+                    return new object[] { w.Code };
+                });
+
+                this.ExecuteIncSyncTask<StockCode>($"增量同步{nameof(StockCode)}", "Stock:Sync:2DB:Stock:ALLCode", (w) => {
+                    return new object[] { w.Code };
+                });
+                this.ExecuteIncSyncTask<Conception>($"增量同步{nameof(Conception)}", "Stock:Sync:2DB:Stock:ALLConception", (w) => {
+                    return new object[] { w.Name };
+                });
 
                 Console.WriteLine($"同步任务检查 {DateTime.Now}");
                 Thread.Sleep(5000);

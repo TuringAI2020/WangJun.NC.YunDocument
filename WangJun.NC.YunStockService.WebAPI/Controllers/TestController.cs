@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +24,7 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             _logger = logger;
         }
 
+        [EnableCors("any")]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

@@ -63,3 +63,5 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.csproj.CopyComplete
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.pdb
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.csproj.CoreCompileInputs.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunStockService.Runner\obj\Debug\netcoreapp3.1\WangJun.NC.YunStockService.Runner.genruntimeconfig.cache
