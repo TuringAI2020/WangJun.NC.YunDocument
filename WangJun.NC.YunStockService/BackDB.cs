@@ -58,6 +58,33 @@ namespace WangJun.NC.YunStockService
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Article>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CategoryCode).HasMaxLength(50);
+
+                entity.Property(e => e.CategoryName).HasMaxLength(50);
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.DataSource)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Href)
+                    .IsRequired()
+                    .HasMaxLength(2048);
+
+                entity.Property(e => e.PublishTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
             modelBuilder.Entity<Conception>(entity =>
             {
                 entity.HasKey(e => e.Name);
@@ -531,7 +558,6 @@ namespace WangJun.NC.YunStockService
 
             OnModelCreatingPartial(modelBuilder);
         }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

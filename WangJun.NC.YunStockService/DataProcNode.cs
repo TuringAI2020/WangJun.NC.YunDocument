@@ -466,6 +466,42 @@ namespace WangJun.NC.YunStockService
         }
         #endregion
 
+        #region 长新闻更新
+        public RES UpdateArticle(string keyName, string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:Article";
+            var qSyncName = $"Stock:Sync:2DB:{setName}";
+            var methodName = MethodBase.GetCurrentMethod().Name;
+            try
+            {
+                var list = JSON.ToObject<List<Article>>(jsonRes);
+                var count = 0;
+                if (null != list && 0 < list.Count)
+                {
+                    list.ForEach(p =>
+                    {
+                        p.Id = GUID.FromStringToGuid(p.Content);
+                        var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                        var res2 = REDIS.Current.SortedSetAdd(setName, p, double.Parse(p.PublishTime.ToString("yyyyMMddhhmm")));
+                        var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                        if (res.SUCCESS)
+                        {
+                            count += 1;
+                        }
+
+                    });
+                }
+                Console.WriteLine($"{MethodBase.GetCurrentMethod().Name} 传入 {list.Count} 实际 {count}");
+                return RES.OK(count, $"传入 {list.Count} 实际 {count}");
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{methodName} {ex.Message}");
+            }
+        }
+        #endregion
+
+
         #region 创建任务 - 北向持股统计
         public RES CreateTask北向持股统计(string jsonReq, string jsonRes)
         {

@@ -303,6 +303,22 @@ namespace WangJun.NC.YunStockService
                     return new object[] { w.Name };
                 });
 
+                this.ExecuteIncSyncTask<Article>($"增量同步{nameof(Article)}", "Stock:Sync:2DB:Stock:Article", (w) => {
+                    var resWords = AI_T.GetInst().KeywordsExtraction(w.Content);
+                    if (resWords.SUCCESS && resWords.DATA is List<Keyword>)
+                    {
+                        var words = resWords.DATA as List<Keyword>;
+                        var setName = "Stock:Keywords:ALL";
+                        var qSyncName = $"Stock:Sync:2DB:{setName}";
+                        words.ForEach(m =>
+                        {
+                            REDIS.Current.Enqueue(qSyncName, new Keywords { Id = GUID.FromStringToGuid(m.Word), Keyword = m.Word });
+                            var res = REDIS.Current.SetAdd(setName, m.Word);
+                        });
+                    }
+                    return new object[] { w.Id }; 
+                });
+
                 Console.WriteLine($"同步任务检查 {DateTime.Now}");
                 Thread.Sleep(5000);
             }

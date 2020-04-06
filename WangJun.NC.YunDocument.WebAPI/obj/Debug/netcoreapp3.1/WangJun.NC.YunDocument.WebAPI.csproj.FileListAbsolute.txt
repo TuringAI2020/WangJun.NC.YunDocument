@@ -55,3 +55,5 @@ D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.WebAPI\bin\Debu
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.WebAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.WebAPI\bin\Debug\netcoreapp3.1\Pathoschild.Http.Client.dll
 D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.WebAPI\bin\Debug\netcoreapp3.1\TencentCloud.dll
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.WebAPI\obj\Debug\netcoreapp3.1\WangJun.NC.YunDocument.WebAPI.csproj.CoreCompileInputs.cache
+D:\WangJunCode2019\WangJun.NC.YunDocument\WangJun.NC.YunDocument.WebAPI\obj\Debug\netcoreapp3.1\WangJun.NC.YunDocument.WebAPI.genruntimeconfig.cache

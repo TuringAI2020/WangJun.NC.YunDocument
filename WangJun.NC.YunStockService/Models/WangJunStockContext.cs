@@ -15,6 +15,7 @@ namespace WangJun.NC.YunStockService.Models
         {
         }
 
+        public virtual DbSet<Article> Article { get; set; }
         public virtual DbSet<Conception> Conception { get; set; }
         public virtual DbSet<Hxtc> Hxtc { get; set; }
         public virtual DbSet<Keywords> Keywords { get; set; }
@@ -44,6 +45,33 @@ namespace WangJun.NC.YunStockService.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Article>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CategoryCode).HasMaxLength(50);
+
+                entity.Property(e => e.CategoryName).HasMaxLength(50);
+
+                entity.Property(e => e.Content).IsRequired();
+
+                entity.Property(e => e.DataSource)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Href)
+                    .IsRequired()
+                    .HasMaxLength(2048);
+
+                entity.Property(e => e.PublishTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
             modelBuilder.Entity<Conception>(entity =>
             {
                 entity.HasKey(e => e.Name);
