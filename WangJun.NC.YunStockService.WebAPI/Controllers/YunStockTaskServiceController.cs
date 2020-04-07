@@ -56,6 +56,10 @@ namespace WangJun.NC.YunStockService.WebAPI.Controllers
             {
                 res = DataProcNode.GetInst().CreateTask北向成交明细(jsonReq, jsonRes);
             }
+            else if ("CreateTask机构调研列表" == method)
+            {
+                res = DataProcNode.GetInst().CreateTask机构调研列表(jsonReq, jsonRes);
+            }
             else if ("" == method)
             {
 

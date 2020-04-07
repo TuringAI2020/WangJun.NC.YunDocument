@@ -319,6 +319,10 @@ namespace WangJun.NC.YunStockService
                     return new object[] { w.Id }; 
                 });
 
+                this.ExecuteIncSyncTask<Jgdylb>($"增量同步{nameof(Jgdylb)}", "Stock:Sync:2DB:Stock:JGDYLB", (w) => {
+                    return new object[] { w.Id };
+                });
+
                 Console.WriteLine($"同步任务检查 {DateTime.Now}");
                 Thread.Sleep(5000);
             }

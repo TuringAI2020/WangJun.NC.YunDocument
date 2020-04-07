@@ -195,6 +195,34 @@ namespace WangJun.NC.YunStockService
                         return res;
                     }
                 }
+                else if ("JGDYLB" == keyName)
+                {
+                    var count = 0;
+                    var list = JSON.ToObject<List<Jgdylb>>(jsonRes);
+                    if (null != list && 0 < list.Count)
+                    {
+                        list.ForEach(p =>
+                        {
+                            p.Id = GUID.FromStringToGuid(JSON.ToJson(p));
+                            var qSyncName = $"Stock:Sync:2DB:Stock:{keyName}";
+                            var setName = $"Stock:{keyName}:{p.Code}";
+                            var res1 = REDIS.Current.Enqueue(qSyncName, p);
+                            var res2 = REDIS.Current.SortedSetAdd(setName, p, p.公告日期tag);
+                            var res = (res1.SUCCESS && res2.SUCCESS) ? RES.OK() : RES.FAIL();
+                            if (res.SUCCESS)
+                            {
+                                count += 1;
+                            }
+                        });
+                    }
+                    if ((0 < list.Count && count == list.Count) || 0 == list.Count)
+                    {
+                        jsonReq = JSON.ToJson(JSON.ToObject<Dictionary<string, object>>(jsonReq));
+                        var res = REDIS.Current.RemoveListItem(listName, jsonReq, -1);
+                        this.RemoveTaskStatus(listName, jsonReq);
+                        return res;
+                    }
+                }
                 return RES.FAIL($"传入参数无效");
             }
             catch (Exception ex)
@@ -669,6 +697,44 @@ namespace WangJun.NC.YunStockService
                     {
                         Code = code,
                         Url = $"http://data.eastmoney.com/hsgt/{code}.html",
+                        RetryCount = 3
+                    };
+                    var res2 = REDIS.Current.Enqueue(qTaskName, item);
+                    total++;
+                    if (res2.SUCCESS)
+                    {
+                        count++;
+                    }
+                    return true;
+                });
+                res.MESSAGE = $"{MethodBase.GetCurrentMethod().Name} 任务创建完毕 应该创建 {total} 实际 {count}";
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return RES.FAIL($"{MethodBase.GetCurrentMethod().Name} 任务创建异常 {ex.Message}");
+            }
+        }
+        #endregion
+
+        #region 创建任务 - 机构调研列表
+        public RES CreateTask机构调研列表(string jsonReq, string jsonRes)
+        {
+            var setName = $"Stock:ALLCode";
+            var qTaskName = "Stock:Task:JGDYLB:Task0";
+
+            try
+            {
+                var count = 0;
+                var total = 0;
+                REDIS.Current.KeyRemove(qTaskName);
+                var res = REDIS.Current.DictTraverse(setName, "*", (dictName, code, name, count2, index) =>
+                {
+
+                    var item = new
+                    {
+                        Code = code,
+                        Url = $"http://data.eastmoney.com/jgdy/gsjsdy/{code}.html",
                         RetryCount = 3
                     };
                     var res2 = REDIS.Current.Enqueue(qTaskName, item);

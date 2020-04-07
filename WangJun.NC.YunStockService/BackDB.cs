@@ -118,6 +118,44 @@ namespace WangJun.NC.YunStockService
                     .HasMaxLength(200);
             });
 
+            modelBuilder.Entity<Jgdylb>(entity =>
+            {
+                entity.ToTable("JGDYLB");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Code)
+                    .IsRequired()
+                    .HasMaxLength(6)
+                    .IsFixedLength();
+
+                entity.Property(e => e.公告日期)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.公告日期tag).HasColumnName("公告日期Tag");
+
+                entity.Property(e => e.接待人员)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.接待地点)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.接待方式)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.接待日期)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.接待日期tag).HasColumnName("接待日期Tag");
+            });
+
             modelBuilder.Entity<Keywords>(entity =>
             {
                 entity.Property(e => e.Id)
